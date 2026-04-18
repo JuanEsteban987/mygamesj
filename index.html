@@ -3,337 +3,633 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor Multimedia Pro - Juan Estena Giraldo Pinto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Matias | Creative Multimedia Designer - Juan Estena Giraldo Pinto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ESTILO INSPIRADO EN LA IMAGEN: MATIAS DESIGNER
+           COLORES: Negro Puro, Gris Antracita, Verde Neón
+        */
         :root {
-            --color-dark: #121212;
-            --color-accent: #00d2ff;
-            --color-accent-dark: #0095b6;
-            --color-bg: #f4f7f6;
-            --color-card: #ffffff;
-            --color-text: #333;
+            --bg-black: #0a0a0a;
+            --bg-card: #141414;
+            --accent: #ccff00; /* Verde neón de la imagen */
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --border: #222222;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Raleway', sans-serif; background: var(--color-bg); color: var(--color-text); line-height: 1.6; }
 
-        /* Header */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .logo {
+            font-family: 'Syne', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-black); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* --- Header & Navigation --- */
         header {
-            background: var(--color-dark);
-            color: white;
-            padding: 15px 40px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            padding: 30px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 2000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
         }
-        .logo { font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: 1px; }
-        .author-tag { font-size: 0.75rem; color: var(--color-accent); font-style: italic; }
-        nav ul { list-style: none; display: flex; gap: 20px; }
-        nav a { color: white; text-decoration: none; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
-        nav a:hover { color: var(--color-accent); }
 
-        /* Hero / Inicio */
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: 900;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .btn-talk {
+            background: var(--accent);
+            color: black;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .btn-talk:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
+        }
+
+        /* --- Hero Section --- */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1470');
-            background-size: cover;
-            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .availability {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            border-left: 1px solid var(--accent);
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 90%;
+            background: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop') no-repeat bottom right;
+            background-size: contain;
+            filter: grayscale(100%);
+            opacity: 0.8;
+            z-index: 5;
+        }
+
+        /* Ticker Verde Neón (Como en la foto) */
+        .ticker-wrap {
+            background: var(--accent);
+            color: black;
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .ticker-move {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Panel de Herramientas --- */
+        .tools-section {
+            padding: 100px 5%;
+            background: #0f0f0f;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .editor-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: var(--transition);
+        }
+
+        .editor-card:hover {
+            border-color: var(--accent);
+        }
+
+        .upload-area {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed var(--border);
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: var(--transition);
         }
-        .hero h1 { font-family: 'Poppins', sans-serif; font-size: 3.5rem; margin-bottom: 10px; }
-        .hero p { font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; }
 
-        /* Panel de Herramientas */
-        .panel-container { padding: 100px 20px; max-width: 1300px; margin: 0 auto; }
-        .panel-title { text-align: center; margin-bottom: 50px; }
-        .panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 30px; }
-        .card { background: var(--color-card); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .upload-area:hover {
+            background: rgba(204, 255, 0, 0.05);
+            border-color: var(--accent);
+        }
 
-        /* Controles */
-        .control-box { margin-bottom: 20px; }
-        .label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
-        input[type="range"] { width: 100%; accent-color: var(--color-accent); cursor: pointer; }
-        .preview-area { background: #000; border-radius: 8px; margin: 20px 0; min-height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        canvas { max-width: 100%; height: auto; }
+        .preview-box {
+            width: 100%;
+            min-height: 400px;
+            background: #000;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-        /* Botones */
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; transition: 0.3s; }
-        .btn-main { background: var(--color-accent); color: white; }
-        .btn-main:hover { background: var(--color-accent-dark); }
-        .btn-dark { background: var(--color-dark); color: white; }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
 
-        /* Sección Funciones */
-        #funciones { background: white; padding: 80px 40px; margin-top: 50px; }
-        .func-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
-        .func-item h3 { color: var(--color-accent); margin-bottom: 10px; }
+        /* --- Controls & Sliders --- */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-        /* Footer */
-        footer { background: var(--color-dark); color: white; padding: 40px; text-align: center; margin-top: 100px; }
+        .control-item {
+            margin-bottom: 15px;
+        }
 
-        /* Muestra */
-        .sample-box { background: #eee; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .control-item label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
 
-        @media (max-width: 600px) { .panel-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 2rem; } }
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Botones Pro */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-pro {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .btn-pro:hover {
+            background: white;
+            color: black;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: black;
+            border: none;
+        }
+
+        /* Visualizador Audio */
+        .audio-viz {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 50px;
+        }
+
+        .bar {
+            width: 4px;
+            background: var(--accent);
+            height: 10px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 100px 60px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-logo { font-size: 4rem; margin-bottom: 20px; }
+        .credit-text { color: var(--text-dim); font-size: 0.9rem; }
+        .credit-name { color: var(--accent); font-weight: 800; }
+
+        @media (max-width: 1024px) {
+            .editor-container { grid-template-columns: 1fr; }
+            header { padding: 20px; }
+            .hero-image-overlay { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            MULTIMEDIA STUDIO
-            <div class="author-tag">By Juan Estena Giraldo Pinto</div>
+        <div class="logo-box">
+            <div class="logo-icon">M</div>
+            <div class="logo-text">MATIAS</div>
         </div>
         <nav>
             <ul>
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#herramientas">Herramientas</a></li>
-                <li><a href="#funciones">Funciones</a></li>
-                <li><a href="#about">Acerca de</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#footer">Contact</a></li>
             </ul>
         </nav>
+        <a href="#footer" class="btn-talk">Let's Talk &rarr;</a>
     </header>
 
-    <section id="inicio" class="hero">
-        <h1>Transforma tu Multimedia</h1>
-        <p>Edición profesional de imagen y sonido directamente desde tu navegador. Rápido, seguro y gratuito.</p>
-        <div class="btn-group">
-            <a href="#herramientas" class="btn btn-main" style="text-decoration: none;">Abrir Panel de Edición</a>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="availability">Currently available for creative work worldwide ↗</div>
+            <h1>Creative Visual<br><span style="color: var(--accent)">Designer & Editor</span></h1>
+            <p style="color: var(--text-dim); font-size: 1.2rem; max-width: 500px;">
+                I am Juan Estena Giraldo Pinto, specializing in high-end multimedia processing and digital tools.
+            </p>
+            <div class="btn-group" style="margin-top: 50px;">
+                <a href="#tools" class="btn-talk" style="padding: 20px 40px; font-size: 1rem;">Open Studio Panel</a>
+            </div>
         </div>
+        <div class="hero-image-overlay"></div>
     </section>
 
-    <section id="herramientas" class="panel-container">
-        <div class="panel-title">
-            <h2>Panel de Control Maestro</h2>
-            <p>Carga tus archivos y aplica efectos avanzados</p>
+    <div class="ticker-wrap">
+        <div class="ticker-move">
+            ✴ WEBSITE DESIGN & LOGO ✴ BUSINESS BRANDING ✴ MOBILE APPLICATION DESIGN ✴ UI/UX MOBILE DESIGN ✴ MULTIMEDIA PROCESSING ✴ PHOTO EDITING ✴ AUDIO MANIPULATION ✴ JUAN ESTENA GIRALDO PINTO ✴ 
+            ✴ WEBSITE DESIGN & LOGO ✴ BUSINESS BRANDING ✴ MOBILE APPLICATION DESIGN ✴ UI/UX MOBILE DESIGN ✴ MULTIMEDIA PROCESSING ✴ PHOTO EDITING ✴ AUDIO MANIPULATION ✴ JUAN ESTENA GIRALDO PINTO ✴ 
+        </div>
+    </div>
+
+    <section class="tools-section" id="tools">
+        <div class="section-header">
+            <h2>Multimedia Studio Panel</h2>
+            <p>Advanced real-time processing for professional creators.</p>
         </div>
 
-        <div class="panel-grid">
-            <div class="card">
-                <h3>🖼️ Procesador de Imagen</h3>
-                <input type="file" id="imgInput" accept="image/*" style="margin: 15px 0;">
-                
-                <div class="preview-area" id="imgPreview">
-                    <canvas id="mainCanvas"></canvas>
+        <div class="editor-container">
+            <div class="editor-card">
+                <h3>Image Processor <span style="color: var(--accent)">.v4</span></h3>
+                <div class="upload-area" id="imgDrop">
+                    <span style="font-size: 2rem;">📁</span>
+                    <p>Drag image or click to upload</p>
+                    <input type="file" id="imgFile" accept="image/*" hidden>
                 </div>
 
-                <div class="control-grid">
-                    <div class="control-box">
-                        <div class="label-row"><span>Brillo</span><span id="bVal">100%</span></div>
-                        <input type="range" id="bRange" min="0" max="200" value="100">
+                <div class="preview-box">
+                    <canvas id="canvasImg"></canvas>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <label>Resolution <span>%</span></label>
+                        <input type="range" id="resRange" min="5" max="100" value="100">
                     </div>
-                    <div class="control-box">
-                        <div class="label-row"><span>Contraste</span><span id="cVal">100%</span></div>
-                        <input type="range" id="cRange" min="0" max="200" value="100">
+                    <div class="control-item">
+                        <label>Brightness <span>%</span></label>
+                        <input type="range" id="brightRange" min="0" max="200" value="100">
                     </div>
-                    <div class="control-box">
-                        <div class="label-row"><span>Saturación</span><span id="sVal">100%</span></div>
-                        <input type="range" id="sRange" min="0" max="200" value="100">
+                    <div class="control-item">
+                        <label>Contrast <span>%</span></label>
+                        <input type="range" id="contRange" min="0" max="200" value="100">
                     </div>
-                    <div class="control-box">
-                        <div class="label-row"><span>Viñeta</span><span id="vVal">0%</span></div>
-                        <input type="range" id="vRange" min="0" max="100" value="0">
+                    <div class="control-item">
+                        <label>Blur <span>px</span></label>
+                        <input type="range" id="blurRange" min="0" max="20" value="0">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-dark" onclick="applyFilter('grayscale(100%)')">B/N</button>
-                    <button class="btn btn-dark" onclick="applyFilter('sepia(100%) contrast(120%)')">Vintage</button>
-                    <button class="btn btn-dark" onclick="applyFilter('hue-rotate(180deg)')">Invertir Tono</button>
-                    <button class="btn btn-main" id="downloadImg">Descargar Imagen</button>
+                    <button class="btn-pro" onclick="setFilter('grayscale(100%)')">Noir</button>
+                    <button class="btn-pro" onclick="setFilter('sepia(100%)')">Vintage</button>
+                    <button class="btn-pro" onclick="setFilter('invert(100%)')">Negative</button>
+                    <button class="btn-pro btn-accent" id="dlImg">Download Image</button>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>🎵 Procesador de Audio</h3>
-                <input type="file" id="audioInput" accept="audio/*" style="margin: 15px 0;">
-                
-                <div class="preview-area" style="flex-direction: column; color: white; text-align: center;">
-                    <div id="waveDisplay">Visualizador Activo</div>
-                    <audio id="mainAudio" controls style="width: 80%; margin-top: 10px;"></audio>
+            <div class="editor-card">
+                <h3>Audio Master Engine <span style="color: var(--accent)">.v4</span></h3>
+                <div class="upload-area" id="audioDrop">
+                    <span style="font-size: 2rem;">🎵</span>
+                    <p>Drag audio or click to upload</p>
+                    <input type="file" id="audioFile" accept="audio/*" hidden>
                 </div>
 
-                <div class="control-grid">
-                    <div class="control-box">
-                        <div class="label-row"><span>Volumen Maestro</span><span id="volVal">1.0</span></div>
-                        <input type="range" id="volRange" min="0" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="control-box">
-                        <div class="label-row"><span>Velocidad</span><span id="speedVal">1.0x</span></div>
+                <div class="preview-box" style="background: #000; flex-direction: column;">
+                    <div class="audio-viz" id="visualizer">
+                        </div>
+                    <audio id="player" controls style="margin-top: 20px; width: 80%;"></audio>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <label>Playback Speed <span>x</span></label>
                         <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1">
                     </div>
-                    <div class="control-box">
-                        <div class="label-row"><span>Panorámica (L/R)</span><span id="panVal">Centro</span></div>
-                        <input type="range" id="panRange" min="-1" max="1" step="0.1" value="0">
+                    <div class="control-item">
+                        <label>Volume <span>dB</span></label>
+                        <input type="range" id="volRange" min="0" max="2" step="0.1" value="1">
                     </div>
-                    <div class="control-box">
-                        <label><input type="checkbox" id="compressorCheck"> Compresor de Limiting</label>
+                    <div class="control-item">
+                        <label>Bass Boost <span>dB</span></label>
+                        <input type="range" id="bassRange" min="-10" max="20" value="0">
+                    </div>
+                    <div class="control-item">
+                        <label>Treble <span>dB</span></label>
+                        <input type="range" id="trebRange" min="-10" max="20" value="0">
                     </div>
                 </div>
 
-                <div class="sample-box">
-                    <strong>Archivo de Muestra:</strong>
-                    <p style="font-size: 0.8rem; margin-bottom: 5px;">Escucha "m.mp3" para probar los efectos:</p>
-                    <audio src="m.mp3" controls style="width: 100%; height: 30px;"></audio>
+                <div class="sample-box" style="margin-top: 20px; padding: 15px; background: #0a0a0a; border-radius: 10px;">
+                    <label style="font-size: 0.7rem; color: var(--accent);">SAMPLE PREVIEW:</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                        <span style="font-size: 0.8rem;">m.mp3</span>
+                        <audio src="m.mp3" controls style="height: 25px; flex: 1;"></audio>
+                    </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-main" id="renderAudio">Procesar y Descargar WAV</button>
-                    <button class="btn btn-dark" onclick="resetAudio()">Resetear Audio</button>
+                    <button class="btn-pro" onclick="resetAudio()">Reset Audio</button>
+                    <button class="btn-pro btn-accent" id="dlAudio">Export WAV</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="funciones">
-        <div style="max-width: 1000px; margin: 0 auto;">
-            <h2 style="text-align: center;">Funciones de la Página</h2>
-            <div class="func-grid">
-                <div class="func-item">
-                    <h3>Procesamiento Real-Time</h3>
-                    <p>Todos los efectos de imagen se aplican mediante aceleración de hardware por GPU usando Canvas API.</p>
-                </div>
-                <div class="func-item">
-                    <h3>Web Audio Engine</h3>
-                    <p>Manipulación de frecuencia, ganancia y panorámica estéreo sin pérdida de fidelidad.</p>
-                </div>
-                <div class="func-item">
-                    <h3>Privacidad Total</h3>
-                    <p>Tus archivos no se suben a ningún servidor; todo el proceso ocurre localmente en tu equipo.</p>
-                </div>
-                <div class="func-item">
-                    <h3>Exportación HQ</h3>
-                    <p>Descarga tus resultados en formatos PNG de alta definición y archivos de audio WAV sin compresión.</p>
-                </div>
+    <section class="tools-section" id="functions" style="background: #0a0a0a;">
+        <div class="section-header">
+            <h2>Core Capabilities</h2>
+        </div>
+        <div class="editor-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <div class="editor-card" style="text-align: center;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">Resolution Downscaling</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim);">Reduce image dimensions physically for web optimization and lighter file sizes.</p>
+            </div>
+            <div class="editor-card" style="text-align: center;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">Biquad Filtering</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim);">Pro-grade audio equalization with low-shelf and high-shelf frequency control.</p>
+            </div>
+            <div class="editor-card" style="text-align: center;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">GPU Acceleration</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim);">Filters applied via Canvas 2D API for zero-lag editing in the browser.</p>
+            </div>
+            <div class="editor-card" style="text-align: center;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">Zero Server Upload</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim);">Your data stays in your RAM. Pure client-side processing for 100% privacy.</p>
             </div>
         </div>
     </section>
 
-    <section id="about" style="padding: 100px 40px; background: #eee;">
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h2>Acerca de este Proyecto</h2>
-            <p style="margin: 20px 0;">Esta plataforma fue diseñada para democratizar el acceso a herramientas de edición multimedia. Ideal para creadores de contenido que necesitan ajustes rápidos sin instalar software pesado.</p>
-            <p><strong>Desarrollado por:</strong> Juan Estena Giraldo Pinto</p>
-            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600" style="width: 100%; border-radius: 12px; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <footer id="footer">
+        <div class="footer-logo">MATIAS</div>
+        <p class="credit-text">
+            This professional multimedia platform was created and developed by<br>
+            <span class="credit-name">JUAN ESTENA GIRALDO PINTO</span>
+        </p>
+        <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
+            <a href="#" style="color: var(--accent); text-decoration: none;">TWITTER</a>
+            <a href="#" style="color: var(--accent); text-decoration: none;">INSTAGRAM</a>
+            <a href="#" style="color: var(--accent); text-decoration: none;">LINKEDIN</a>
         </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Multimedia Studio Pro - Creado por <strong>Juan Estena Giraldo Pinto</strong></p>
-        <p style="font-size: 0.8rem; margin-top: 10px; color: #888;">Todos los derechos reservados. Desarrollado con JavaScript nativo.</p>
+        <p style="margin-top: 50px; font-size: 0.7rem; color: #444;">&copy; 2026 MULTIMEDIA STUDIO PRO. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script>
-        // --- LOGICA IMAGEN ---
-        const canvas = document.getElementById('mainCanvas');
+        // --- LOGICA DE IMAGEN ---
+        const canvas = document.getElementById('canvasImg');
         const ctx = canvas.getContext('2d');
-        let activeImg = null;
-        let activeFilter = "";
+        const imgInput = document.getElementById('imgFile');
+        const imgDrop = document.getElementById('imgDrop');
+        let currentImg = null;
+        let globalFilter = "";
 
-        document.getElementById('imgInput').onchange = (e) => {
+        imgDrop.onclick = () => imgInput.click();
+        imgInput.onchange = (e) => loadFile(e.target.files[0]);
+
+        function loadFile(file) {
             const reader = new FileReader();
-            reader.onload = (event) => {
-                activeImg = new Image();
-                activeImg.onload = () => {
-                    canvas.width = activeImg.width;
-                    canvas.height = activeImg.height;
-                    updateImg();
-                };
-                activeImg.src = event.target.result;
+            reader.onload = (ev) => {
+                currentImg = new Image();
+                currentImg.onload = () => updateImage();
+                currentImg.src = ev.target.result;
             };
-            reader.readAsDataURL(e.target.files[0]);
-        };
-
-        function updateImg() {
-            if(!activeImg) return;
-            const b = document.getElementById('bRange').value;
-            const c = document.getElementById('cRange').value;
-            const s = document.getElementById('sRange').value;
-            const v = document.getElementById('vRange').value;
-
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%) ${activeFilter}`;
-            ctx.drawImage(activeImg, 0, 0);
-
-            if(v > 0) {
-                const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/1.2);
-                grad.addColorStop(0, 'transparent');
-                grad.addColorStop(1, `rgba(0,0,0,${v/100})`);
-                ctx.fillStyle = grad;
-                ctx.fillRect(0,0,canvas.width, canvas.height);
-            }
+            reader.readAsDataURL(file);
         }
 
-        function applyFilter(f) { activeFilter = f; updateImg(); }
+        function updateImage() {
+            if(!currentImg) return;
+            const res = document.getElementById('resRange').value / 100;
+            canvas.width = currentImg.width * res;
+            canvas.height = currentImg.height * res;
 
-        ['bRange', 'cRange', 'sRange', 'vRange'].forEach(id => {
-            document.getElementById(id).oninput = (e) => {
-                document.getElementById(id.replace('Range','Val')).textContent = e.target.value + '%';
-                updateImg();
-            };
+            ctx.filter = `${globalFilter} brightness(${document.getElementById('brightRange').value}%) contrast(${document.getElementById('contRange').value}%) blur(${document.getElementById('blurRange').value}px)`;
+            ctx.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
+        }
+
+        function setFilter(f) { globalFilter = f; updateImage(); }
+
+        ['resRange', 'brightRange', 'contRange', 'blurRange'].forEach(id => {
+            document.getElementById(id).oninput = updateImage;
         });
 
-        document.getElementById('downloadImg').onclick = () => {
+        document.getElementById('dlImg').onclick = () => {
             const link = document.createElement('a');
-            link.download = "editado_juan_estena.png";
+            link.download = 'Matias_Edit_JuanEstena.png';
             link.href = canvas.toDataURL();
             link.click();
         };
 
-        // --- LOGICA AUDIO ---
-        let audioCtx, source, gainNode, panNode;
-        const audioPlayer = document.getElementById('mainAudio');
+        // --- LOGICA DE AUDIO ---
+        let aCtx, aSource, aGain, aBass, aTreb;
+        const player = document.getElementById('player');
+        const viz = document.getElementById('visualizer');
 
-        document.getElementById('audioInput').onchange = (e) => {
-            const file = e.target.files[0];
-            audioPlayer.src = URL.createObjectURL(file);
-            setupAudio();
+        // Crear barras de visualizador
+        for(let i=0; i<30; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            viz.appendChild(bar);
+        }
+
+        document.getElementById('audioDrop').onclick = () => document.getElementById('audioFile').click();
+        document.getElementById('audioFile').onchange = (e) => {
+            player.src = URL.createObjectURL(e.target.files[0]);
+            initAudio();
         };
 
-        function setupAudio() {
-            if(!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                source = audioCtx.createMediaElementSource(audioPlayer);
-                gainNode = audioCtx.createGain();
-                panNode = audioCtx.createStereoPanner();
-                source.connect(gainNode).connect(panNode).connect(audioCtx.destination);
+        function initAudio() {
+            if(!aCtx) {
+                aCtx = new (window.AudioContext || window.webkitAudioContext)();
+                aSource = aCtx.createMediaElementSource(player);
+                aGain = aCtx.createGain();
+                aBass = aCtx.createBiquadFilter();
+                aBass.type = "lowshelf";
+                aBass.frequency.value = 200;
+                aTreb = aCtx.createBiquadFilter();
+                aTreb.type = "highshelf";
+                aTreb.frequency.value = 3000;
+
+                aSource.connect(aBass).connect(aTreb).connect(aGain).connect(aCtx.destination);
             }
         }
 
-        document.getElementById('volRange').oninput = (e) => {
-            if(gainNode) gainNode.gain.value = e.target.value;
-            document.getElementById('volVal').textContent = e.target.value;
-        };
+        document.getElementById('volRange').oninput = (e) => { if(aGain) aGain.gain.value = e.target.value; };
+        document.getElementById('speedRange').oninput = (e) => { player.playbackRate = e.target.value; };
+        document.getElementById('bassRange').oninput = (e) => { if(aBass) aBass.gain.value = e.target.value; };
+        document.getElementById('trebRange').oninput = (e) => { if(aTreb) aTreb.gain.value = e.target.value; };
 
-        document.getElementById('speedRange').oninput = (e) => {
-            audioPlayer.playbackRate = e.target.value;
-            document.getElementById('speedVal').textContent = e.target.value + 'x';
+        // Animación de barras (Simulada)
+        player.onplay = () => {
+            const bars = document.querySelectorAll('.bar');
+            setInterval(() => {
+                if(!player.paused) {
+                    bars.forEach(b => {
+                        b.style.height = Math.random() * 50 + 'px';
+                        b.style.opacity = Math.random();
+                    });
+                }
+            }, 100);
         };
-
-        document.getElementById('panRange').oninput = (e) => {
-            if(panNode) panNode.pan.value = e.target.value;
-            const v = e.target.value;
-            document.getElementById('panVal').textContent = v == 0 ? "Centro" : (v < 0 ? "Izquierda" : "Derecha");
-        };
-
-        function resetAudio() {
-            audioPlayer.playbackRate = 1;
-            if(gainNode) gainNode.gain.value = 1;
-            if(panNode) panNode.pan.value = 0;
-            document.querySelectorAll('#audio input[type=range]').forEach(r => r.value = 1);
-        }
     </script>
 </body>
 </html>
