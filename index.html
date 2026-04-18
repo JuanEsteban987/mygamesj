@@ -1,635 +1,770 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matias | Creative Multimedia Designer - Juan Estena Giraldo Pinto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* ESTILO INSPIRADO EN LA IMAGEN: MATIAS DESIGNER
-           COLORES: Negro Puro, Gris Antracita, Verde Neón
-        */
-        :root {
-            --bg-black: #0a0a0a;
-            --bg-card: #141414;
-            --accent: #ccff00; /* Verde neón de la imagen */
-            --text-main: #ffffff;
-            --text-dim: #a0a0a0;
-            --border: #222222;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>MATIAS · Block Studio</title>
+  <!-- Fuentes & Estilo Moderno -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <!-- Blockly -->
+  <script src="https://unpkg.com/blockly@10.4.0/blockly.min.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.0/blocks.min.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.0/javascript.min.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.0/msg/es.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0c0e;
+      color: #eef2f5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-        body {
-            background-color: var(--bg-black);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+    /* --- HEADER ESTILO MATIAS --- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(18, 22, 28, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+    }
 
-        h1, h2, h3, .logo {
-            font-family: 'Syne', sans-serif;
-            text-transform: uppercase;
-        }
+    .menu-btn {
+      background: none;
+      border: none;
+      color: #c0ccd8;
+      font-size: 24px;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      transition: all 0.2s;
+      margin-right: 12px;
+    }
 
-        /* --- Custom Scrollbar --- */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-black); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+    .menu-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #b7a4ff;
+    }
 
-        /* --- Header & Navigation --- */
-        header {
-            padding: 30px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 2000;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-        }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
 
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .brand-main {
+      font-weight: 600;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e0e7ff 0%, #b7a4ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            font-weight: 900;
-        }
+    .brand-tag {
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: #8f9eb2;
+      margin-left: 6px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
 
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+    }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-        }
+    .action-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #d3dce6;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        nav a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: var(--transition);
-        }
+    .action-btn:hover {
+      background: #2a2f3a;
+      border-color: #b7a4ff60;
+      color: white;
+      box-shadow: 0 4px 12px rgba(183, 164, 255, 0.15);
+    }
 
-        nav a:hover {
-            color: var(--accent);
-        }
+    .run-btn {
+      background: #6d5ac9;
+      border-color: #8f7dff;
+      color: white;
+    }
+    .run-btn:hover {
+      background: #7f6ae0;
+    }
 
-        .btn-talk {
-            background: var(--accent);
-            color: black;
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            transition: var(--transition);
-        }
+    /* --- START MENU (overlay lateral) --- */
+    .start-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.25s ease;
+    }
 
-        .btn-talk:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
-        }
+    .start-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 100vh;
+      background: #14181f;
+      border-right: 1px solid #2c3540;
+      box-shadow: 20px 0 40px rgba(0, 0, 0, 0.6);
+      padding: 24px 16px;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* --- Hero Section --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 10%;
-            position: relative;
-            overflow: hidden;
-        }
+    .start-menu.active {
+      transform: translateX(0);
+    }
 
-        .hero-content {
-            z-index: 10;
-            max-width: 800px;
-        }
+    .start-menu-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
 
-        .availability {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            border-left: 1px solid var(--accent);
-            padding-left: 15px;
-            margin-bottom: 20px;
-        }
+    .menu-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #2a3340;
+      margin-bottom: 24px;
+    }
 
-        .hero h1 {
-            font-size: clamp(3rem, 10vw, 7rem);
-            line-height: 0.9;
-            font-weight: 800;
-            margin-bottom: 40px;
-        }
+    .avatar {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(145deg, #303b4a, #1e2530);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 22px;
+      color: #b7a4ff;
+      border: 1px solid #b7a4ff40;
+    }
 
-        .hero-image-overlay {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 50%;
-            height: 90%;
-            background: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop') no-repeat bottom right;
-            background-size: contain;
-            filter: grayscale(100%);
-            opacity: 0.8;
-            z-index: 5;
-        }
+    .profile-text h3 {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .profile-text p {
+      color: #8f9eb2;
+      font-size: 0.8rem;
+    }
 
-        /* Ticker Verde Neón (Como en la foto) */
-        .ticker-wrap {
-            background: var(--accent);
-            color: black;
-            padding: 20px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            display: flex;
-            font-weight: 900;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-        }
+    .menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
 
-        .ticker-move {
-            display: inline-block;
-            animation: ticker 30s linear infinite;
-        }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: transparent;
+      border: none;
+      color: #d3dce6;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.15s;
+      text-align: left;
+    }
 
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+    .menu-item:hover {
+      background: #262e3a;
+      color: white;
+    }
 
-        /* --- Panel de Herramientas --- */
-        .tools-section {
-            padding: 100px 5%;
-            background: #0f0f0f;
-        }
+    .menu-item .icon {
+      font-size: 20px;
+      width: 24px;
+      opacity: 0.8;
+    }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
+    .menu-divider {
+      margin: 16px 0;
+      border-top: 1px solid #2a3340;
+    }
 
-        .section-header h2 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
+    /* --- WORKSPACE AREA --- */
+    .workspace-container {
+      flex: 1;
+      display: flex;
+      position: relative;
+      background: #0f1318;
+    }
 
-        .section-header p {
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-        }
+    #blocklyDiv {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-        .editor-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
+    /* panel de salida (consola) */
+    .output-panel {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      max-width: calc(100% - 40px);
+      background: #1a2028e0;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #3f4a5a;
+      border-radius: 20px;
+      padding: 14px 18px;
+      box-shadow: 0 20px 35px -5px #00000080;
+      z-index: 15;
+      color: #cfddee;
+    }
 
-        .editor-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            transition: var(--transition);
-        }
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
 
-        .editor-card:hover {
-            border-color: var(--accent);
-        }
+    .output-header span {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.75rem;
+      color: #b7a4ff;
+    }
 
-        .upload-area {
-            width: 100%;
-            height: 200px;
-            border: 2px dashed var(--border);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-bottom: 30px;
-            transition: var(--transition);
-        }
+    .clear-btn {
+      background: none;
+      border: none;
+      color: #a0b3cc;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+    .clear-btn:hover {
+      background: #2e3a48;
+      color: white;
+    }
 
-        .upload-area:hover {
-            background: rgba(204, 255, 0, 0.05);
-            border-color: var(--accent);
-        }
+    #outputConsole {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      background: #0c1117;
+      padding: 12px 14px;
+      border-radius: 14px;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #2d3846;
+      color: #d6e3f0;
+    }
 
-        .preview-box {
-            width: 100%;
-            min-height: 400px;
-            background: #000;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
+    /* ocultar elementos nativos de blockly que no queremos */
+    .blocklyToolboxDiv {
+      background: #1c232c !important;
+      border-right: 1px solid #2f3b48 !important;
+    }
+    .blocklyFlyout {
+      background: #1e2630 !important;
+      border-right: 1px solid #3a4553 !important;
+    }
+    .blocklyFlyoutButton {
+      fill: #2a3543 !important;
+    }
+    .blocklyText {
+      fill: #e0e9f5 !important;
+      font-family: 'Inter', sans-serif !important;
+    }
+    .blocklyMainBackground {
+      fill: #11161c !important;
+    }
 
-        canvas {
-            max-width: 100%;
-            height: auto;
-        }
+    /* botón flotante import/export oculto (se maneja desde menú) */
+    .file-input-hidden {
+      display: none;
+    }
 
-        /* --- Controls & Sliders --- */
-        .controls-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .control-item {
-            margin-bottom: 15px;
-        }
-
-        .control-item label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 4px;
-            -webkit-appearance: none;
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 15px;
-            height: 15px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        /* Botones Pro */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn-pro {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: var(--transition);
-        }
-
-        .btn-pro:hover {
-            background: white;
-            color: black;
-        }
-
-        .btn-accent {
-            background: var(--accent);
-            color: black;
-            border: none;
-        }
-
-        /* Visualizador Audio */
-        .audio-viz {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 50px;
-        }
-
-        .bar {
-            width: 4px;
-            background: var(--accent);
-            height: 10px;
-        }
-
-        /* --- Footer --- */
-        footer {
-            padding: 100px 60px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .footer-logo { font-size: 4rem; margin-bottom: 20px; }
-        .credit-text { color: var(--text-dim); font-size: 0.9rem; }
-        .credit-name { color: var(--accent); font-weight: 800; }
-
-        @media (max-width: 1024px) {
-            .editor-container { grid-template-columns: 1fr; }
-            header { padding: 20px; }
-            .hero-image-overlay { display: none; }
-        }
-    </style>
+    /* estética de tooltip */
+    .blocklyTooltipDiv {
+      background: #1e2a36 !important;
+      color: #f0f5ff !important;
+      border: 1px solid #62738b !important;
+      box-shadow: 0 6px 14px black !important;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-box">
-            <div class="logo-icon">M</div>
-            <div class="logo-text">MATIAS</div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#tools">Tools</a></li>
-                <li><a href="#functions">Functions</a></li>
-                <li><a href="#footer">Contact</a></li>
-            </ul>
-        </nav>
-        <a href="#footer" class="btn-talk">Let's Talk &rarr;</a>
-    </header>
+<!-- HEADER -->
+<header class="app-header">
+  <button class="menu-btn" id="menuToggleBtn" aria-label="Menú inicio">☰</button>
+  <div class="brand">
+    <span class="brand-main">MATIAS</span>
+    <span class="brand-tag">· block studio</span>
+  </div>
+  <div class="header-actions">
+    <button class="action-btn" id="saveProjectBtn" title="Guardar proyecto (XML)">💾 Guardar</button>
+    <button class="action-btn" id="loadProjectBtn" title="Importar proyecto">📂 Importar</button>
+    <button class="action-btn run-btn" id="runCodeBtn">▶ Ejecutar</button>
+  </div>
+</header>
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="availability">Currently available for creative work worldwide ↗</div>
-            <h1>Creative Visual<br><span style="color: var(--accent)">Designer & Editor</span></h1>
-            <p style="color: var(--text-dim); font-size: 1.2rem; max-width: 500px;">
-                I am Juan Estena Giraldo Pinto, specializing in high-end multimedia processing and digital tools.
-            </p>
-            <div class="btn-group" style="margin-top: 50px;">
-                <a href="#tools" class="btn-talk" style="padding: 20px 40px; font-size: 1rem;">Open Studio Panel</a>
-            </div>
-        </div>
-        <div class="hero-image-overlay"></div>
-    </section>
-
-    <div class="ticker-wrap">
-        <div class="ticker-move">
-            ✴ WEBSITE DESIGN & LOGO ✴ BUSINESS BRANDING ✴ MOBILE APPLICATION DESIGN ✴ UI/UX MOBILE DESIGN ✴ MULTIMEDIA PROCESSING ✴ PHOTO EDITING ✴ AUDIO MANIPULATION ✴ JUAN ESTENA GIRALDO PINTO ✴ 
-            ✴ WEBSITE DESIGN & LOGO ✴ BUSINESS BRANDING ✴ MOBILE APPLICATION DESIGN ✴ UI/UX MOBILE DESIGN ✴ MULTIMEDIA PROCESSING ✴ PHOTO EDITING ✴ AUDIO MANIPULATION ✴ JUAN ESTENA GIRALDO PINTO ✴ 
-        </div>
+<!-- START MENU (lateral) -->
+<div class="start-menu-overlay" id="menuOverlay"></div>
+<nav class="start-menu" id="startMenu">
+  <div class="menu-profile">
+    <div class="avatar">DM</div>
+    <div class="profile-text">
+      <h3>David Matias</h3>
+      <p>Brand & Webflow Designer</p>
     </div>
+  </div>
+  <div class="menu-items">
+    <button class="menu-item" id="menuNewProject">
+      <span class="icon">✨</span> Nuevo proyecto
+    </button>
+    <button class="menu-item" id="menuOpenExample">
+      <span class="icon">📋</span> Cargar ejemplo
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="menuSaveAs">
+      <span class="icon">💾</span> Guardar como...
+    </button>
+    <button class="menu-item" id="menuImport">
+      <span class="icon">📂</span> Importar proyecto
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="menuClearOutput">
+      <span class="icon">🧹</span> Limpiar consola
+    </button>
+  </div>
+  <div style="margin-top: auto; font-size: 0.7rem; color: #5c6f87; padding: 16px 8px;">
+    Creative Visual Designer<br>UI/UX · Mobile · Branding
+  </div>
+</nav>
 
-    <section class="tools-section" id="tools">
-        <div class="section-header">
-            <h2>Multimedia Studio Panel</h2>
-            <p>Advanced real-time processing for professional creators.</p>
-        </div>
+<!-- Input file oculto para importar -->
+<input type="file" id="fileInput" accept=".xml,text/xml" class="file-input-hidden" />
 
-        <div class="editor-container">
-            <div class="editor-card">
-                <h3>Image Processor <span style="color: var(--accent)">.v4</span></h3>
-                <div class="upload-area" id="imgDrop">
-                    <span style="font-size: 2rem;">📁</span>
-                    <p>Drag image or click to upload</p>
-                    <input type="file" id="imgFile" accept="image/*" hidden>
-                </div>
+<!-- Área de trabajo Blockly -->
+<div class="workspace-container">
+  <div id="blocklyDiv"></div>
+  
+  <!-- Panel de salida estilo consola -->
+  <div class="output-panel">
+    <div class="output-header">
+      <span>📟 CONSOLA DE EJECUCIÓN</span>
+      <button class="clear-btn" id="clearConsoleBtn">limpiar</button>
+    </div>
+    <div id="outputConsole">// El resultado de ejecutar los bloques aparecerá aquí.<br>// Usa bloques de "imprimir" o "texto".</div>
+  </div>
+</div>
 
-                <div class="preview-box">
-                    <canvas id="canvasImg"></canvas>
-                </div>
+<!-- XML por defecto (workspace inicial) -->
+<xml id="startBlocks" style="display:none">
+  <block type="variables_set" x="30" y="30">
+    <field name="VAR">mensaje</field>
+    <value name="VALUE">
+      <block type="text">
+        <field name="TEXT">¡Hola desde Matias Block Studio!</field>
+      </block>
+    </value>
+    <next>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="variables_get">
+            <field name="VAR">mensaje</field>
+          </block>
+        </value>
+        <next>
+          <block type="math_number">
+            <field name="NUM">2026</field>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
 
-                <div class="controls-grid">
-                    <div class="control-item">
-                        <label>Resolution <span>%</span></label>
-                        <input type="range" id="resRange" min="5" max="100" value="100">
-                    </div>
-                    <div class="control-item">
-                        <label>Brightness <span>%</span></label>
-                        <input type="range" id="brightRange" min="0" max="200" value="100">
-                    </div>
-                    <div class="control-item">
-                        <label>Contrast <span>%</span></label>
-                        <input type="range" id="contRange" min="0" max="200" value="100">
-                    </div>
-                    <div class="control-item">
-                        <label>Blur <span>px</span></label>
-                        <input type="range" id="blurRange" min="0" max="20" value="0">
-                    </div>
-                </div>
+<script>
+  (function(){
+    "use strict";
 
-                <div class="btn-group">
-                    <button class="btn-pro" onclick="setFilter('grayscale(100%)')">Noir</button>
-                    <button class="btn-pro" onclick="setFilter('sepia(100%)')">Vintage</button>
-                    <button class="btn-pro" onclick="setFilter('invert(100%)')">Negative</button>
-                    <button class="btn-pro btn-accent" id="dlImg">Download Image</button>
-                </div>
-            </div>
+    // ---- Configuración Blockly ----
+    Blockly.setLocale(Blockly.Msg); 
+    
+    // Toolbox personalizada (estilo moderno)
+    const toolbox = {
+      "kind": "categoryToolbox",
+      "contents": [
+        { "kind": "category", "name": "Lógica", "colour": "#8f7dff", "contents": [
+            { "kind": "block", "type": "controls_if" },
+            { "kind": "block", "type": "logic_compare" },
+            { "kind": "block", "type": "logic_operation" },
+            { "kind": "block", "type": "logic_negate" },
+            { "kind": "block", "type": "logic_boolean" }
+        ]},
+        { "kind": "category", "name": "Bucles", "colour": "#6d5ac9", "contents": [
+            { "kind": "block", "type": "controls_repeat_ext" },
+            { "kind": "block", "type": "controls_whileUntil" },
+            { "kind": "block", "type": "controls_for" },
+            { "kind": "block", "type": "controls_flow_statements" }
+        ]},
+        { "kind": "category", "name": "Matemáticas", "colour": "#4f9da6", "contents": [
+            { "kind": "block", "type": "math_number" },
+            { "kind": "block", "type": "math_arithmetic" },
+            { "kind": "block", "type": "math_single" },
+            { "kind": "block", "type": "math_constant" },
+            { "kind": "block", "type": "math_number_property" },
+            { "kind": "block", "type": "math_round" }
+        ]},
+        { "kind": "category", "name": "Texto", "colour": "#b76e9b", "contents": [
+            { "kind": "block", "type": "text" },
+            { "kind": "block", "type": "text_print" },
+            { "kind": "block", "type": "text_join" },
+            { "kind": "block", "type": "text_length" },
+            { "kind": "block", "type": "text_isEmpty" }
+        ]},
+        { "kind": "category", "name": "Listas", "colour": "#d97742", "contents": [
+            { "kind": "block", "type": "lists_create_with" },
+            { "kind": "block", "type": "lists_repeat" },
+            { "kind": "block", "type": "lists_length" },
+            { "kind": "block", "type": "lists_isEmpty" }
+        ]},
+        { "kind": "category", "name": "Variables", "custom": "VARIABLE", "colour": "#b78b4f" },
+        { "kind": "category", "name": "Funciones", "custom": "PROCEDURE", "colour": "#9e7bb5" }
+      ]
+    };
 
-            <div class="editor-card">
-                <h3>Audio Master Engine <span style="color: var(--accent)">.v4</span></h3>
-                <div class="upload-area" id="audioDrop">
-                    <span style="font-size: 2rem;">🎵</span>
-                    <p>Drag audio or click to upload</p>
-                    <input type="file" id="audioFile" accept="audio/*" hidden>
-                </div>
+    // Inyectar workspace
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: toolbox,
+      scrollbars: true,
+      trashcan: true,
+      media: 'https://unpkg.com/blockly@10.4.0/media/',
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 0.95,
+        maxScale: 1.5,
+        minScale: 0.5,
+      },
+      grid: {
+        spacing: 20,
+        length: 2,
+        colour: '#2e3b4a',
+        snap: true
+      },
+    });
 
-                <div class="preview-box" style="background: #000; flex-direction: column;">
-                    <div class="audio-viz" id="visualizer">
-                        </div>
-                    <audio id="player" controls style="margin-top: 20px; width: 80%;"></audio>
-                </div>
+    // Cargar bloques iniciales
+    const startXml = document.getElementById('startBlocks');
+    if (startXml) {
+      Blockly.Xml.domToWorkspace(startXml, workspace);
+    }
 
-                <div class="controls-grid">
-                    <div class="control-item">
-                        <label>Playback Speed <span>x</span></label>
-                        <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="control-item">
-                        <label>Volume <span>dB</span></label>
-                        <input type="range" id="volRange" min="0" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="control-item">
-                        <label>Bass Boost <span>dB</span></label>
-                        <input type="range" id="bassRange" min="-10" max="20" value="0">
-                    </div>
-                    <div class="control-item">
-                        <label>Treble <span>dB</span></label>
-                        <input type="range" id="trebRange" min="-10" max="20" value="0">
-                    </div>
-                </div>
+    // ---- Referencias UI ----
+    const menuToggle = document.getElementById('menuToggleBtn');
+    const startMenu = document.getElementById('startMenu');
+    const overlay = document.getElementById('menuOverlay');
+    const outputConsole = document.getElementById('outputConsole');
+    const clearConsoleBtn = document.getElementById('clearConsoleBtn');
+    const runBtn = document.getElementById('runCodeBtn');
+    const saveBtn = document.getElementById('saveProjectBtn');
+    const loadBtn = document.getElementById('loadProjectBtn');
+    const fileInput = document.getElementById('fileInput');
+    const menuNew = document.getElementById('menuNewProject');
+    const menuExample = document.getElementById('menuOpenExample');
+    const menuSaveAs = document.getElementById('menuSaveAs');
+    const menuImport = document.getElementById('menuImport');
+    const menuClearOut = document.getElementById('menuClearOutput');
 
-                <div class="sample-box" style="margin-top: 20px; padding: 15px; background: #0a0a0a; border-radius: 10px;">
-                    <label style="font-size: 0.7rem; color: var(--accent);">SAMPLE PREVIEW:</label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                        <span style="font-size: 0.8rem;">m.mp3</span>
-                        <audio src="m.mp3" controls style="height: 25px; flex: 1;"></audio>
-                    </div>
-                </div>
+    // ---- Funciones de menú inicio ----
+    function openMenu() {
+      startMenu.classList.add('active');
+      overlay.classList.add('active');
+    }
+    function closeMenu() {
+      startMenu.classList.remove('active');
+      overlay.classList.remove('active');
+    }
+    
+    menuToggle.addEventListener('click', openMenu);
+    overlay.addEventListener('click', closeMenu);
+    
+    // Cerrar menú al hacer clic en una opción (excepto si es toggle)
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
 
-                <div class="btn-group">
-                    <button class="btn-pro" onclick="resetAudio()">Reset Audio</button>
-                    <button class="btn-pro btn-accent" id="dlAudio">Export WAV</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    // ---- Limpiar consola ----
+    function clearConsole() {
+      outputConsole.innerHTML = '// Consola limpia.';
+    }
+    clearConsoleBtn.addEventListener('click', clearConsole);
+    if (menuClearOut) menuClearOut.addEventListener('click', clearConsole);
 
-    <section class="tools-section" id="functions" style="background: #0a0a0a;">
-        <div class="section-header">
-            <h2>Core Capabilities</h2>
-        </div>
-        <div class="editor-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-            <div class="editor-card" style="text-align: center;">
-                <h4 style="color: var(--accent); margin-bottom: 10px;">Resolution Downscaling</h4>
-                <p style="font-size: 0.8rem; color: var(--text-dim);">Reduce image dimensions physically for web optimization and lighter file sizes.</p>
-            </div>
-            <div class="editor-card" style="text-align: center;">
-                <h4 style="color: var(--accent); margin-bottom: 10px;">Biquad Filtering</h4>
-                <p style="font-size: 0.8rem; color: var(--text-dim);">Pro-grade audio equalization with low-shelf and high-shelf frequency control.</p>
-            </div>
-            <div class="editor-card" style="text-align: center;">
-                <h4 style="color: var(--accent); margin-bottom: 10px;">GPU Acceleration</h4>
-                <p style="font-size: 0.8rem; color: var(--text-dim);">Filters applied via Canvas 2D API for zero-lag editing in the browser.</p>
-            </div>
-            <div class="editor-card" style="text-align: center;">
-                <h4 style="color: var(--accent); margin-bottom: 10px;">Zero Server Upload</h4>
-                <p style="font-size: 0.8rem; color: var(--text-dim);">Your data stays in your RAM. Pure client-side processing for 100% privacy.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer id="footer">
-        <div class="footer-logo">MATIAS</div>
-        <p class="credit-text">
-            This professional multimedia platform was created and developed by<br>
-            <span class="credit-name">JUAN ESTENA GIRALDO PINTO</span>
-        </p>
-        <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
-            <a href="#" style="color: var(--accent); text-decoration: none;">TWITTER</a>
-            <a href="#" style="color: var(--accent); text-decoration: none;">INSTAGRAM</a>
-            <a href="#" style="color: var(--accent); text-decoration: none;">LINKEDIN</a>
-        </div>
-        <p style="margin-top: 50px; font-size: 0.7rem; color: #444;">&copy; 2026 MULTIMEDIA STUDIO PRO. ALL RIGHTS RESERVED.</p>
-    </footer>
-
-    <script>
-        // --- LOGICA DE IMAGEN ---
-        const canvas = document.getElementById('canvasImg');
-        const ctx = canvas.getContext('2d');
-        const imgInput = document.getElementById('imgFile');
-        const imgDrop = document.getElementById('imgDrop');
-        let currentImg = null;
-        let globalFilter = "";
-
-        imgDrop.onclick = () => imgInput.click();
-        imgInput.onchange = (e) => loadFile(e.target.files[0]);
-
-        function loadFile(file) {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                currentImg = new Image();
-                currentImg.onload = () => updateImage();
-                currentImg.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
+    // ---- Log personalizado para capturar console.log ----
+    const originalLog = console.log;
+    const logMessages = [];
+    
+    console.log = function(...args) {
+      const msg = args.map(arg => {
+        if (typeof arg === 'object') {
+          try { return JSON.stringify(arg, null, 2); } catch(e) { return String(arg); }
         }
-
-        function updateImage() {
-            if(!currentImg) return;
-            const res = document.getElementById('resRange').value / 100;
-            canvas.width = currentImg.width * res;
-            canvas.height = currentImg.height * res;
-
-            ctx.filter = `${globalFilter} brightness(${document.getElementById('brightRange').value}%) contrast(${document.getElementById('contRange').value}%) blur(${document.getElementById('blurRange').value}px)`;
-            ctx.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
+        return String(arg);
+      }).join(' ');
+      
+      logMessages.push(msg);
+      // Actualizar panel
+      if (outputConsole) {
+        if (outputConsole.innerHTML.startsWith('//') || outputConsole.innerHTML === '// Consola limpia.') {
+          outputConsole.innerHTML = '';
         }
+        const newLine = document.createElement('div');
+        newLine.textContent = '> ' + msg;
+        outputConsole.appendChild(newLine);
+        outputConsole.scrollTop = outputConsole.scrollHeight;
+      }
+      originalLog.apply(console, args);
+    };
 
-        function setFilter(f) { globalFilter = f; updateImage(); }
+    // ---- Ejecutar código generado ----
+    function executeBlocks() {
+      // Limpiar logs previos (pero mantenemos historial visual)
+      logMessages.length = 0;
+      if (!outputConsole.innerHTML.includes('>')) {
+        outputConsole.innerHTML = '';
+      } else {
+        // añadir separador visual
+        const sep = document.createElement('div');
+        sep.textContent = '--- ejecución ---';
+        sep.style.color = '#b7a4ff';
+        outputConsole.appendChild(sep);
+      }
 
-        ['resRange', 'brightRange', 'contRange', 'blurRange'].forEach(id => {
-            document.getElementById(id).oninput = updateImage;
-        });
-
-        document.getElementById('dlImg').onclick = () => {
-            const link = document.createElement('a');
-            link.download = 'Matias_Edit_JuanEstena.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        };
-
-        // --- LOGICA DE AUDIO ---
-        let aCtx, aSource, aGain, aBass, aTreb;
-        const player = document.getElementById('player');
-        const viz = document.getElementById('visualizer');
-
-        // Crear barras de visualizador
-        for(let i=0; i<30; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            viz.appendChild(bar);
+      try {
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        if (!code.trim()) {
+          outputConsole.innerHTML += '<div style="color:#f5a97f;">⚠️ No hay bloques para ejecutar.</div>';
+          return;
         }
-
-        document.getElementById('audioDrop').onclick = () => document.getElementById('audioFile').click();
-        document.getElementById('audioFile').onchange = (e) => {
-            player.src = URL.createObjectURL(e.target.files[0]);
-            initAudio();
-        };
-
-        function initAudio() {
-            if(!aCtx) {
-                aCtx = new (window.AudioContext || window.webkitAudioContext)();
-                aSource = aCtx.createMediaElementSource(player);
-                aGain = aCtx.createGain();
-                aBass = aCtx.createBiquadFilter();
-                aBass.type = "lowshelf";
-                aBass.frequency.value = 200;
-                aTreb = aCtx.createBiquadFilter();
-                aTreb.type = "highshelf";
-                aTreb.frequency.value = 3000;
-
-                aSource.connect(aBass).connect(aTreb).connect(aGain).connect(aCtx.destination);
-            }
+        
+        // Ejecutar en contexto aislado
+        const func = new Function('console', code);
+        func(console);
+        
+        // Si no hubo logs, mostrar mensaje
+        if (logMessages.length === 0) {
+          outputConsole.innerHTML += '<div style="color:#9ece6a;">✓ Ejecutado (sin salida).</div>';
         }
+      } catch (e) {
+        outputConsole.innerHTML += `<div style="color:#f7768e;">❌ Error: ${e.message}</div>`;
+        console.error(e);
+      }
+    }
 
-        document.getElementById('volRange').oninput = (e) => { if(aGain) aGain.gain.value = e.target.value; };
-        document.getElementById('speedRange').oninput = (e) => { player.playbackRate = e.target.value; };
-        document.getElementById('bassRange').oninput = (e) => { if(aBass) aBass.gain.value = e.target.value; };
-        document.getElementById('trebRange').oninput = (e) => { if(aTreb) aTreb.gain.value = e.target.value; };
+    runBtn.addEventListener('click', executeBlocks);
 
-        // Animación de barras (Simulada)
-        player.onplay = () => {
-            const bars = document.querySelectorAll('.bar');
-            setInterval(() => {
-                if(!player.paused) {
-                    bars.forEach(b => {
-                        b.style.height = Math.random() * 50 + 'px';
-                        b.style.opacity = Math.random();
-                    });
-                }
-            }, 100);
-        };
-    </script>
+    // ---- Guardar proyecto (XML) ----
+    function saveWorkspace() {
+      const xml = Blockly.Xml.workspaceToDom(workspace);
+      const xmlText = Blockly.Xml.domToPrettyText(xml);
+      
+      const blob = new Blob([xmlText], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `matias_proyecto_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.xml`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      outputConsole.innerHTML += '<div style="color:#a6d6ff;">💾 Proyecto guardado.</div>';
+    }
+
+    saveBtn.addEventListener('click', saveWorkspace);
+    if (menuSaveAs) menuSaveAs.addEventListener('click', saveWorkspace);
+
+    // ---- Importar proyecto ----
+    function importWorkspace(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const xml = Blockly.utils.xml.textToDom(e.target.result);
+          workspace.clear();
+          Blockly.Xml.domToWorkspace(xml, workspace);
+          outputConsole.innerHTML += '<div style="color:#a6d6ff;">📂 Proyecto importado correctamente.</div>';
+        } catch (err) {
+          outputConsole.innerHTML += `<div style="color:#f7768e;">❌ Error al importar: ${err.message}</div>`;
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    loadBtn.addEventListener('click', () => fileInput.click());
+    if (menuImport) menuImport.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+      const file = fileInput.files[0];
+      if (file) {
+        importWorkspace(file);
+      }
+      fileInput.value = ''; // permitir volver a seleccionar mismo archivo
+    });
+
+    // ---- Nuevo proyecto (limpiar workspace) ----
+    function newProject() {
+      if (confirm('¿Crear nuevo proyecto? Se perderán los cambios no guardados.')) {
+        workspace.clear();
+        clearConsole();
+        outputConsole.innerHTML = '// Nuevo proyecto listo.';
+      }
+    }
+    menuNew.addEventListener('click', newProject);
+
+    // ---- Cargar ejemplo (demo visual) ----
+    function loadExample() {
+      workspace.clear();
+      // cargar un ejemplo más elaborado
+      const exampleXml = `
+        <xml xmlns="https://developers.google.com/blockly/xml">
+          <block type="variables_set" x="40" y="40">
+            <field name="VAR">contador</field>
+            <value name="VALUE">
+              <block type="math_number"><field name="NUM">0</field></block>
+            </value>
+            <next>
+              <block type="controls_repeat_ext">
+                <value name="TIMES"><block type="math_number"><field name="NUM">5</field></block></value>
+                <statement name="DO">
+                  <block type="variables_set">
+                    <field name="VAR">contador</field>
+                    <value name="VALUE">
+                      <block type="math_arithmetic">
+                        <field name="OP">ADD</field>
+                        <value name="A"><block type="variables_get"><field name="VAR">contador</field></block></value>
+                        <value name="B"><block type="math_number"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="text_print">
+                        <value name="TEXT">
+                          <block type="text_join">
+                            <value name="ADD0"><block type="text"><field name="TEXT">Iteración: </field></block></value>
+                            <value name="ADD1"><block type="variables_get"><field name="VAR">contador</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="text_print">
+                    <value name="TEXT">
+                      <block type="text"><field name="TEXT">🎉 ¡Finalizado! Matias Creative Visual</field></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </xml>
+      `;
+      const dom = Blockly.utils.xml.textToDom(exampleXml);
+      Blockly.Xml.domToWorkspace(dom, workspace);
+      clearConsole();
+      outputConsole.innerHTML = '// Ejemplo cargado: contador + bucle.';
+    }
+    if (menuExample) menuExample.addEventListener('click', loadExample);
+
+    // ---- Botón limpiar consola flotante adicional ----
+    document.getElementById('clearConsoleBtn').addEventListener('click', clearConsole);
+
+    // Ajustar tamaño al cambiar ventana
+    window.addEventListener('resize', () => {
+      Blockly.svgResize(workspace);
+    });
+    
+    // Inicial
+    Blockly.svgResize(workspace);
+    
+    // Ajustar tema visual
+    console.log('%c MATIAS BLOCK STUDIO ', 'background:#6d5ac9; color:#fff; font-weight:bold; border-radius:20px;');
+    
+    // Interceptar atajos: Ctrl+S para guardar
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        saveWorkspace();
+      }
+      if (e.key === 'Escape' && startMenu.classList.contains('active')) {
+        closeMenu();
+      }
+    });
+
+  })();
+</script>
+
+<!-- Ajustes extra para integración -->
 </body>
 </html>
