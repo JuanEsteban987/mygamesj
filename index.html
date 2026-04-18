@@ -14,12 +14,7 @@
   <script src="https://unpkg.com/blockly@10.4.0/javascript.min.js"></script>
   <script src="https://unpkg.com/blockly@10.4.0/msg/es.min.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: #0a0c0f;
@@ -32,279 +27,108 @@
       flex-direction: column;
       overflow: hidden;
     }
-
-    /* Fuente decorativa para títulos */
-    h1, h2, h3, .brand-main, .dungeon-title {
-      font-family: 'Cinzel', serif;
-      font-weight: 600;
-      letter-spacing: 2px;
-    }
-
-    /* --- CABECERA ESTILO CALABOZO --- */
+    h1, h2, h3, .brand-main, .dungeon-title { font-family: 'Cinzel', serif; font-weight: 600; letter-spacing: 2px; }
     .app-header {
-      display: flex;
-      align-items: center;
-      padding: 12px 28px;
-      background: #0e1113e0;
-      backdrop-filter: blur(10px);
-      border-bottom: 3px solid #3a2e1f;
-      box-shadow: 0 4px 20px #00000080, inset 0 1px 0 #6b5a3e40;
-      z-index: 20;
-      position: relative;
+      display: flex; align-items: center; padding: 12px 28px;
+      background: #0e1113e0; backdrop-filter: blur(10px);
+      border-bottom: 3px solid #3a2e1f; box-shadow: 0 4px 20px #00000080, inset 0 1px 0 #6b5a3e40;
+      z-index: 20; position: relative;
     }
     .app-header::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: repeating-linear-gradient(90deg, #5e4b32, #2e241a 8px);
-      opacity: 0.5;
+      content: ""; position: absolute; bottom: -5px; left: 0; width: 100%; height: 6px;
+      background: repeating-linear-gradient(90deg, #5e4b32, #2e241a 8px); opacity: 0.5;
     }
-
     .menu-btn {
-      background: #1e1a14;
-      border: 2px solid #6b5a3e;
-      color: #d4c29b;
-      font-size: 26px;
-      cursor: pointer;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      box-shadow: inset 0 2px 5px #000000, 0 4px 0 #0a0806;
-      transition: all 0.1s;
-      margin-right: 18px;
+      background: #1e1a14; border: 2px solid #6b5a3e; color: #d4c29b; font-size: 26px;
+      cursor: pointer; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; box-shadow: inset 0 2px 5px #000000, 0 4px 0 #0a0806;
+      transition: all 0.1s; margin-right: 18px;
     }
-    .menu-btn:hover {
-      background: #2f281e;
-      color: #f5e7c6;
-      border-color: #9e875f;
-      transform: translateY(-2px);
-      box-shadow: inset 0 2px 5px #000000, 0 6px 0 #0a0806;
-    }
-    .menu-btn:active {
-      transform: translateY(2px);
-      box-shadow: inset 0 2px 5px #000000, 0 2px 0 #0a0806;
-    }
-
-    .brand {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      filter: drop-shadow(0 4px 4px black);
-    }
+    .menu-btn:hover { background: #2f281e; color: #f5e7c6; border-color: #9e875f; transform: translateY(-2px); box-shadow: inset 0 2px 5px #000000, 0 6px 0 #0a0806; }
+    .menu-btn:active { transform: translateY(2px); box-shadow: inset 0 2px 5px #000000, 0 2px 0 #0a0806; }
+    .brand { display: flex; align-items: baseline; gap: 8px; filter: drop-shadow(0 4px 4px black); }
     .brand-main {
-      font-size: 2.2rem;
-      background: linear-gradient(135deg, #ebd5b3 0%, #b89b6b 60%, #dac292 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 8px #aa8c54;
+      font-size: 2.2rem; background: linear-gradient(135deg, #ebd5b3 0%, #b89b6b 60%, #dac292 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 8px #aa8c54;
     }
     .brand-tag {
-      font-family: 'Cinzel', serif;
-      font-size: 0.9rem;
-      color: #b8a67c;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      border-left: 2px solid #7a6848;
-      padding-left: 12px;
+      font-family: 'Cinzel', serif; font-size: 0.9rem; color: #b8a67c; text-transform: uppercase;
+      letter-spacing: 4px; border-left: 2px solid #7a6848; padding-left: 12px;
     }
-
-    .header-actions {
-      margin-left: auto;
-      display: flex;
-      gap: 16px;
-    }
+    .header-actions { margin-left: auto; display: flex; gap: 16px; }
     .action-btn {
-      background: #1f1b14;
-      border: 2px solid #5f503a;
-      color: #e3d5b8;
-      padding: 8px 20px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-family: 'Cinzel', serif;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: inset 0 1px 3px #000000, 0 5px 0 #0d0b08;
-      transition: all 0.1s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-transform: uppercase;
+      background: #1f1b14; border: 2px solid #5f503a; color: #e3d5b8; padding: 8px 20px;
+      border-radius: 40px; font-weight: 600; font-family: 'Cinzel', serif; font-size: 0.9rem;
+      letter-spacing: 1px; cursor: pointer; box-shadow: inset 0 1px 3px #000000, 0 5px 0 #0d0b08;
+      transition: all 0.1s; display: flex; align-items: center; gap: 8px; text-transform: uppercase;
     }
-    .action-btn:hover {
-      background: #2f281c;
-      border-color: #b89b6b;
-      color: #fff2db;
-      transform: translateY(-2px);
-      box-shadow: inset 0 1px 3px #000000, 0 7px 0 #0d0b08;
-    }
-    .action-btn:active {
-      transform: translateY(3px);
-      box-shadow: inset 0 1px 3px #000000, 0 2px 0 #0d0b08;
-    }
-    .run-btn {
-      background: #5e3f2c;
-      border-color: #c89f6e;
-      color: #ffefcf;
-      box-shadow: inset 0 1px 3px #2a1e14, 0 5px 0 #3b2a1a;
-    }
-    .run-btn:hover {
-      background: #7a543b;
-      border-color: #e4ba82;
-    }
+    .action-btn:hover { background: #2f281c; border-color: #b89b6b; color: #fff2db; transform: translateY(-2px); box-shadow: inset 0 1px 3px #000000, 0 7px 0 #0d0b08; }
+    .action-btn:active { transform: translateY(3px); box-shadow: inset 0 1px 3px #000000, 0 2px 0 #0d0b08; }
+    .run-btn { background: #5e3f2c; border-color: #c89f6e; color: #ffefcf; box-shadow: inset 0 1px 3px #2a1e14, 0 5px 0 #3b2a1a; }
+    .run-btn:hover { background: #7a543b; border-color: #e4ba82; }
 
-    /* --- MENÚ LATERAL (ESTILO MAZMORRA) --- */
-    .start-menu-overlay {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: #040302b0; backdrop-filter: blur(8px);
-      z-index:50; visibility: hidden; opacity:0; transition:0.25s;
-    }
+    .start-menu-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: #040302b0; backdrop-filter: blur(8px); z-index:50; visibility: hidden; opacity:0; transition:0.25s; }
     .start-menu {
-      position: fixed; top:0; left:0; width:320px; height:100vh;
-      background: #12100cee; backdrop-filter: blur(12px);
-      border-right: 6px solid #3e2f1d;
-      box-shadow: 20px 0 40px #000000b0, inset -2px 0 0 #6b5a3e;
-      padding: 24px 16px;
-      transform: translateX(-100%);
-      transition: transform 0.3s cubic-bezier(0.2,0.9,0.4,1);
-      z-index:60;
-      display: flex; flex-direction: column;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><path fill="%233a2e1f" d="M0 0h1v1H0zM2 2h1v1H2z"/></svg>');
+      position: fixed; top:0; left:0; width:320px; height:100vh; background: #12100cee; backdrop-filter: blur(12px);
+      border-right: 6px solid #3e2f1d; box-shadow: 20px 0 40px #000000b0, inset -2px 0 0 #6b5a3e;
+      padding: 24px 16px; transform: translateX(-100%); transition: transform 0.3s; z-index:60;
+      display: flex; flex-direction: column; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><path fill="%233a2e1f" d="M0 0h1v1H0zM2 2h1v1H2z"/></svg>');
     }
     .start-menu.active { transform: translateX(0); }
     .start-menu-overlay.active { visibility: visible; opacity: 1; }
-
-    .menu-profile {
-      display: flex; align-items: center; gap: 16px;
-      padding-bottom: 28px; border-bottom: 3px solid #5e4b32;
-      margin-bottom: 24px;
-    }
-    .avatar {
-      width: 60px; height: 60px;
-      background: #2e241a;
-      border: 3px solid #b99e6b;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Cinzel', serif; font-weight: 700; font-size: 26px;
-      color: #ebd5b3;
-      box-shadow: inset 0 0 10px black, 0 6px 0 #1e150e;
-    }
+    .menu-profile { display: flex; align-items: center; gap: 16px; padding-bottom: 28px; border-bottom: 3px solid #5e4b32; margin-bottom: 24px; }
+    .avatar { width: 60px; height: 60px; background: #2e241a; border: 3px solid #b99e6b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-weight: 700; font-size: 26px; color: #ebd5b3; box-shadow: inset 0 0 10px black, 0 6px 0 #1e150e; }
     .profile-text h3 { font-size: 1.4rem; color: #ebd5b3; }
     .profile-text p { color: #b8a67c; font-size: 0.8rem; letter-spacing: 1px; }
-
     .menu-items { display: flex; flex-direction: column; gap: 10px; flex:1; }
     .menu-item {
-      display: flex; align-items: center; gap: 16px; padding: 16px 18px;
-      background: #1e1812c0; border: 2px solid #5c4b33;
-      color: #e3d5b8; font-family: 'Cinzel', serif; font-weight: 600;
-      font-size: 1rem; border-radius: 40px; cursor: pointer;
-      box-shadow: inset 0 1px 4px black, 0 5px 0 #1a130c;
-      transition: all 0.1s; text-align: left;
-      backdrop-filter: blur(4px);
+      display: flex; align-items: center; gap: 16px; padding: 16px 18px; background: #1e1812c0; border: 2px solid #5c4b33;
+      color: #e3d5b8; font-family: 'Cinzel', serif; font-weight: 600; font-size: 1rem; border-radius: 40px; cursor: pointer;
+      box-shadow: inset 0 1px 4px black, 0 5px 0 #1a130c; transition: all 0.1s; text-align: left; backdrop-filter: blur(4px);
     }
-    .menu-item:hover {
-      background: #3f3222; border-color: #c9a96b; color: #ffefcf;
-      transform: translateY(-2px); box-shadow: inset 0 1px 4px black, 0 7px 0 #1a130c;
-    }
+    .menu-item:hover { background: #3f3222; border-color: #c9a96b; color: #ffefcf; transform: translateY(-2px); box-shadow: inset 0 1px 4px black, 0 7px 0 #1a130c; }
     .menu-item .icon { font-size: 24px; width: 28px; }
-
     .menu-divider { margin: 20px 0; border-top: 2px dashed #7a6848; }
 
-    /* --- ÁREA PRINCIPAL --- */
-    .main-layout {
-      flex:1; display:flex; overflow:hidden;
-    }
-    .blockly-area {
-      flex:2.2; height:100%; position:relative;
-      background: #0c0e10;
-      border-right: 4px solid #3a2e1f;
-      box-shadow: inset 0 0 40px #000000;
-    }
-    #blocklyDiv {
-      height:100%; width:100%; position:absolute; top:0; left:0;
-    }
-
-    /* Canvas estilo mazmorra */
+    .main-layout { flex:1; display:flex; overflow:hidden; }
+    .blockly-area { flex:2.2; height:100%; position:relative; background: #0c0e10; border-right: 4px solid #3a2e1f; box-shadow: inset 0 0 40px #000000; }
+    #blocklyDiv { height:100%; width:100%; position:absolute; top:0; left:0; }
     .canvas-area {
-      flex:1.2; background: #0f0d0a;
-      background-image: radial-gradient(circle at 20% 30%, #1f281e60 0%, transparent 50%);
-      border-left: 2px solid #624c2e;
-      display:flex; flex-direction:column; padding:20px;
-      overflow-y:auto;
+      flex:1.2; background: #0f0d0a; background-image: radial-gradient(circle at 20% 30%, #1f281e60 0%, transparent 50%);
+      border-left: 2px solid #624c2e; display:flex; flex-direction:column; padding:20px; overflow-y:auto;
     }
-    .dungeon-header {
-      display:flex; justify-content:space-between; align-items:center;
-      margin-bottom: 16px;
-    }
-    .dungeon-header h4 {
-      font-family: 'Cinzel', serif; color: #dac292; font-size: 1.4rem;
-      text-shadow: 0 0 8px #aa8c54; letter-spacing: 3px;
-    }
+    .dungeon-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .dungeon-header h4 { font-family: 'Cinzel', serif; color: #dac292; font-size:1.4rem; text-shadow:0 0 8px #aa8c54; letter-spacing:3px; }
     #gameCanvas {
-      background: #16120c;
-      border-radius: 0px;
-      border: 8px solid #2d2418;
+      background: #16120c; border-radius: 0px; border: 8px solid #2d2418;
       box-shadow: inset 0 0 20px #000000, 0 10px 0 #0a0806, 0 0 0 2px #7a6848;
-      width: 100%;
-      aspect-ratio: 1/1;
-      image-rendering: crisp-edges;
-      image-rendering: pixelated;
+      width: 100%; aspect-ratio: 1/1; image-rendering: crisp-edges; image-rendering: pixelated;
     }
-
     .console-panel {
-      margin-top: 20px;
-      background: #1e1812e0;
-      backdrop-filter: blur(8px);
-      border: 3px solid #5c4b33;
-      border-radius: 16px;
-      padding: 14px 18px;
-      box-shadow: inset 0 0 15px black, 0 6px 0 #1a130c;
+      margin-top: 20px; background: #1e1812e0; backdrop-filter: blur(8px); border: 3px solid #5c4b33;
+      border-radius: 16px; padding: 14px 18px; box-shadow: inset 0 0 15px black, 0 6px 0 #1a130c;
     }
-    .console-header {
-      display:flex; justify-content:space-between; margin-bottom: 10px;
-    }
-    .console-header span {
-      font-family: 'Cinzel', serif; color: #d4af7a; font-weight:600;
-    }
+    .console-header { display:flex; justify-content:space-between; margin-bottom:10px; }
+    .console-header span { font-family: 'Cinzel', serif; color: #d4af7a; font-weight:600; }
     #outputConsole {
-      font-family: 'Courier New', monospace; font-size: 13px;
-      background: #0a0907; padding: 12px; border-radius: 10px;
-      max-height: 140px; overflow-y:auto; white-space:pre-wrap;
-      border: 1px solid #7a6848; color: #c0b79a;
-      box-shadow: inset 0 0 10px black;
+      font-family: 'Courier New', monospace; font-size: 13px; background: #0a0907; padding: 12px;
+      border-radius: 10px; max-height: 140px; overflow-y:auto; white-space:pre-wrap;
+      border: 1px solid #7a6848; color: #c0b79a; box-shadow: inset 0 0 10px black;
     }
-    .clear-btn {
-      background: none; border: 1px solid #7a6848; color: #ccbda0;
-      padding: 4px 12px; border-radius: 30px; font-family: 'Cinzel', serif;
-      cursor: pointer;
-    }
-
-    /* Estilos Blockly oscuros */
+    .clear-btn { background: none; border: 1px solid #7a6848; color: #ccbda0; padding: 4px 12px; border-radius: 30px; font-family: 'Cinzel', serif; cursor: pointer; }
     .blocklyToolboxDiv { background: #191410 !important; border-right: 2px solid #5e4b32 !important; }
     .blocklyFlyout { background: #1e1812 !important; border-right: 2px solid #7a6848 !important; }
     .blocklyText { fill: #e3dcc7 !important; font-family: 'Inter' !important; }
     .blocklyMainBackground { fill: #0e0c0a !important; }
-
     .file-input-hidden { display:none; }
 
-    /* Modal editor sprite */
     .modal {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background: #030201e0; backdrop-filter: blur(10px);
-      display:flex; align-items:center; justify-content:center; z-index:100;
-      visibility:hidden;
+      position:fixed; top:0; left:0; width:100%; height:100%; background: #030201e0; backdrop-filter: blur(10px);
+      display:flex; align-items:center; justify-content:center; z-index:100; visibility:hidden;
     }
     .modal-content {
-      background: #1e1812; padding: 28px; border-radius: 32px;
-      border: 4px solid #b99e6b; box-shadow: 0 20px 0 #0a0806, inset 0 0 20px black;
-      max-width: 550px; width:90%;
+      background: #1e1812; padding: 28px; border-radius: 32px; border: 4px solid #b99e6b;
+      box-shadow: 0 20px 0 #0a0806, inset 0 0 20px black; max-width: 550px; width:90%;
     }
     .pixel-grid { display:grid; gap:1px; background:#2b2218; padding:3px; border-radius:12px; }
     .pixel { background:#0e0c0a; aspect-ratio:1/1; border-radius:2px; cursor:pointer; border:1px solid #4a3b2a; }
@@ -313,7 +137,6 @@
 </head>
 <body>
 
-<!-- CABECERA -->
 <header class="app-header">
   <button class="menu-btn" id="menuToggleBtn">☰</button>
   <div class="brand">
@@ -327,15 +150,11 @@
   </div>
 </header>
 
-<!-- MENÚ LATERAL -->
 <div class="start-menu-overlay" id="menuOverlay"></div>
 <nav class="start-menu" id="startMenu">
   <div class="menu-profile">
     <div class="avatar">DM</div>
-    <div class="profile-text">
-      <h3>David Matias</h3>
-      <p>Arcanic Archmage</p>
-    </div>
+    <div class="profile-text"><h3>David Matias</h3><p>Arcanic Archmage</p></div>
   </div>
   <div class="menu-items">
     <button class="menu-item" id="menuNewProject"><span class="icon">✨</span> Nuevo grimorio</button>
@@ -346,18 +165,13 @@
     <div class="menu-divider"></div>
     <button class="menu-item" id="menuClearOutput"><span class="icon">🔥</span> Limpiar runas</button>
   </div>
-  <div style="margin-top:auto; font-family:'Cinzel'; color:#b8a67c; padding:16px;">
-    Creative Visual Designer<br>UI/UX · Branding · Runic
-  </div>
+  <div style="margin-top:auto; font-family:'Cinzel'; color:#b8a67c; padding:16px;">Creative Visual Designer<br>UI/UX · Branding · Runic</div>
 </nav>
 
 <input type="file" id="fileInput" accept=".xml,text/xml" class="file-input-hidden" />
 
-<!-- LAYOUT -->
 <div class="main-layout">
-  <div class="blockly-area">
-    <div id="blocklyDiv"></div>
-  </div>
+  <div class="blockly-area"><div id="blocklyDiv"></div></div>
   <div class="canvas-area">
     <div class="dungeon-header">
       <h4>◈ SALA DE PRUEBAS ◈</h4>
@@ -365,16 +179,12 @@
     </div>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <div class="console-panel">
-      <div class="console-header">
-        <span>📜 REGISTRO ARCANO</span>
-        <button class="clear-btn" id="clearConsoleBtn">limpiar</button>
-      </div>
+      <div class="console-header"><span>📜 REGISTRO ARCANO</span><button class="clear-btn" id="clearConsoleBtn">limpiar</button></div>
       <div id="outputConsole">// Invoca tus bloques y ejecuta...</div>
     </div>
   </div>
 </div>
 
-<!-- MODAL SPRITE -->
 <div class="modal" id="spriteModal">
   <div class="modal-content">
     <h3 style="font-family:'Cinzel'; color:#dac292; margin-bottom:20px;">🎨 TALLADO RÚNICO</h3>
@@ -382,9 +192,7 @@
       <div>
         <label style="color:#dac292;">Dimensión:</label>
         <select id="spriteSizeSelect" style="background:#2b2218; color:white; border:2px solid #b99e6b; padding:6px; border-radius:8px;">
-          <option value="16">16x16</option>
-          <option value="32" selected>32x32</option>
-          <option value="64">64x64</option>
+          <option value="16">16x16</option><option value="32" selected>32x32</option><option value="64">64x64</option>
         </select>
         <div id="pixelGridContainer" style="margin-top:16px;"></div>
       </div>
@@ -398,7 +206,6 @@
   </div>
 </div>
 
-<!-- BLOQUES INICIALES -->
 <xml id="startBlocks" style="display:none">
   <block type="event_whenstart" x="20" y="20"></block>
 </xml>
@@ -408,12 +215,14 @@
     "use strict";
     Blockly.setLocale(Blockly.Msg);
 
-    // ---------- MOTOR DE OBJETOS (DUNGEON) ----------
+    // ---------- MOTOR DE OBJETOS ----------
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const gameObjects = new Map();
     const outputConsole = document.getElementById('outputConsole');
+    let animationFrame = null;
     
+    // Consola personalizada
     function logToConsole(msg, isError=false) {
       const line = document.createElement('div');
       line.textContent = (isError?'❌ ':'> ') + msg;
@@ -422,55 +231,39 @@
       outputConsole.scrollTop = outputConsole.scrollHeight;
     }
     function clearConsoleUI() { outputConsole.innerHTML = '// Pergamino limpio.'; }
+    console.log = function(...args) { logToConsole(args.join(' ')); };
 
-    // Renderizado con estética calabozo
     function renderCanvas() {
       ctx.clearRect(0,0,400,400);
-      // Suelo de mazmorra
-      ctx.fillStyle = '#1e1a14';
-      ctx.fillRect(0,0,400,400);
-      // Patrón de baldosas
-      ctx.strokeStyle = '#4a3e2e';
-      ctx.lineWidth = 1;
+      ctx.fillStyle = '#1e1a14'; ctx.fillRect(0,0,400,400);
+      ctx.strokeStyle = '#4a3e2e'; ctx.lineWidth = 1;
       for(let i=0;i<=400;i+=20) {
         ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
       }
-      // Dibujar objetos
       for(let obj of gameObjects.values()) {
         if(obj.spriteDataURL) {
-          const img = new Image();
-          img.src = obj.spriteDataURL;
+          const img = new Image(); img.src = obj.spriteDataURL;
           if(img.complete) ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
           else img.onload = ()=> ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
         } else {
-          ctx.fillStyle = obj.color || '#b99e6b';
-          ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-          // Detalle rúnico
-          ctx.fillStyle = '#dac292';
-          ctx.font = 'bold 16px Cinzel';
-          ctx.fillText('⬩', obj.x+4, obj.y+18);
+          ctx.fillStyle = obj.color || '#b99e6b'; ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+          ctx.fillStyle = '#dac292'; ctx.font = 'bold 16px Cinzel'; ctx.fillText('⬩', obj.x+4, obj.y+18);
         }
-        ctx.strokeStyle = '#b89b6b';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
-        ctx.fillStyle = '#ebd5b3';
-        ctx.font = 'bold 10px Cinzel';
-        ctx.fillText(obj.id, obj.x+2, obj.y+12);
+        ctx.strokeStyle = '#b89b6b'; ctx.lineWidth = 2; ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
+        ctx.fillStyle = '#ebd5b3'; ctx.font = 'bold 10px Cinzel'; ctx.fillText(obj.id, obj.x+2, obj.y+12);
       }
     }
-
     function resetSimulation() { gameObjects.clear(); renderCanvas(); }
 
-    // ---------- BLOQUES PERSONALIZADOS ----------
+    // ---------- BLOQUES ----------
     const COLORS = { MOVE:'#3d6b5d', OBJ:'#8b6b4d', EVENT:'#6d4f5c', FUNC:'#6d5a7c' };
 
     Blockly.Blocks['move_x'] = {
       init: function() {
         this.appendValueInput('STEPS').setCheck('Number').appendField('Mover X');
         this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.MOVE);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.MOVE);
       }
     };
     Blockly.JavaScript['move_x'] = function(block) {
@@ -482,8 +275,7 @@
       init: function() {
         this.appendValueInput('STEPS').setCheck('Number').appendField('Mover Y');
         this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.MOVE);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.MOVE);
       }
     };
     Blockly.JavaScript['move_y'] = function(block) {
@@ -497,8 +289,7 @@
         this.appendDummyInput().appendField('Crear Objeto').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
         this.appendValueInput('X').setCheck('Number').appendField('X:');
         this.appendValueInput('Y').setCheck('Number').appendField('Y:');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.OBJ);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
       }
     };
     Blockly.JavaScript['create_object'] = function(block) {
@@ -507,14 +298,12 @@
       let y = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_ATOMIC) || '0';
       return `engine.createObject('${id}', ${x}, ${y});\n`;
     };
-
     Blockly.Blocks['set_size'] = {
       init: function() {
         this.appendDummyInput().appendField('Tamaño').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
         this.appendValueInput('W').setCheck('Number').appendField('Ancho');
         this.appendValueInput('H').setCheck('Number').appendField('Alto');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.OBJ);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
       }
     };
     Blockly.JavaScript['set_size'] = function(block) {
@@ -523,13 +312,11 @@
       let h = Blockly.JavaScript.valueToCode(block, 'H', Blockly.JavaScript.ORDER_ATOMIC) || '20';
       return `engine.setSize('${id}', ${w}, ${h});\n`;
     };
-
     Blockly.Blocks['set_color'] = {
       init: function() {
         this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
         this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldColour('#b99e6b'), 'COLOR');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.OBJ);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
       }
     };
     Blockly.JavaScript['set_color'] = function(block) {
@@ -537,13 +324,11 @@
       let color = block.getFieldValue('COLOR');
       return `engine.setColor('${id}', '${color}');\n`;
     };
-
     Blockly.Blocks['edit_sprite'] = {
       init: function() {
         this.appendDummyInput().appendField('Sprite').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
         this.appendDummyInput().appendField('Pixel').appendField(new Blockly.FieldDropdown([["16x16","16"],["32x32","32"],["64x64","64"]]), 'SIZE');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.OBJ);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
       }
     };
     Blockly.JavaScript['edit_sprite'] = function(block) {
@@ -556,37 +341,32 @@
     Blockly.Blocks['event_whenstart'] = {
       init: function() {
         this.appendDummyInput().appendField('🔮 Al Iniciar');
-        this.setNextStatement(true,null);
-        this.setColour(COLORS.EVENT);
+        this.setNextStatement(true,null); this.setColour(COLORS.EVENT);
       }
     };
     Blockly.Blocks['event_keypress'] = {
       init: function() {
         this.appendDummyInput().appendField('⌨️ Al Presionar').appendField(new Blockly.FieldTextInput('Space'), 'KEY');
-        this.appendStatementInput('DO');
-        this.setColour(COLORS.EVENT);
+        this.appendStatementInput('DO'); this.setColour(COLORS.EVENT);
       }
     };
     Blockly.Blocks['event_collision'] = {
       init: function() {
         this.appendDummyInput().appendField('💥 Al Tocar').appendField(new Blockly.FieldTextInput('obj1'), 'ID1');
         this.appendDummyInput().appendField('con').appendField(new Blockly.FieldTextInput('obj2'), 'ID2');
-        this.appendStatementInput('DO');
-        this.setColour(COLORS.EVENT);
+        this.appendStatementInput('DO'); this.setColour(COLORS.EVENT);
       }
     };
     Blockly.Blocks['function_def'] = {
       init: function() {
         this.appendDummyInput().appendField('📜 Función').appendField(new Blockly.FieldTextInput('miFuncion'), 'FUNC_ID');
-        this.appendStatementInput('BODY');
-        this.setColour(COLORS.FUNC);
+        this.appendStatementInput('BODY'); this.setColour(COLORS.FUNC);
       }
     };
     Blockly.Blocks['function_call'] = {
       init: function() {
         this.appendDummyInput().appendField('✨ Invocar').appendField(new Blockly.FieldTextInput('miFuncion'), 'FUNC_ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null);
-        this.setColour(COLORS.FUNC);
+        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.FUNC);
       }
     };
 
@@ -594,15 +374,10 @@
       kind: "categoryToolbox",
       contents: [
         { kind: "category", name: "🔮 Eventos", colour: COLORS.EVENT, contents: [
-          { kind: "block", type: "event_whenstart" },
-          { kind: "block", type: "event_keypress" },
-          { kind: "block", type: "event_collision" }
+          { kind: "block", type: "event_whenstart" }, { kind: "block", type: "event_keypress" }, { kind: "block", type: "event_collision" }
         ]},
         { kind: "category", name: "🧱 Objetos", colour: COLORS.OBJ, contents: [
-          { kind: "block", type: "create_object" },
-          { kind: "block", type: "set_size" },
-          { kind: "block", type: "set_color" },
-          { kind: "block", type: "edit_sprite" }
+          { kind: "block", type: "create_object" }, { kind: "block", type: "set_size" }, { kind: "block", type: "set_color" }, { kind: "block", type: "edit_sprite" }
         ]},
         { kind: "category", name: "⬆️ Movimiento", colour: COLORS.MOVE, contents: [
           { kind: "block", type: "move_x" }, { kind: "block", type: "move_y" }
@@ -623,7 +398,11 @@
     const workspace = Blockly.inject('blocklyDiv', { toolbox, scrollbars: true, trashcan: true, zoom: { controls: true } });
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
 
-    // Engine
+    // Engine con funciones y eventos
+    const functionTable = {};
+    const keyHandlers = {};
+    const collisionChecks = [];
+
     const engine = {
       moveX: (dx,id)=>{ if(gameObjects.has(id)){ gameObjects.get(id).x += Number(dx); renderCanvas(); } },
       moveY: (dy,id)=>{ if(gameObjects.has(id)){ gameObjects.get(id).y += Number(dy); renderCanvas(); } },
@@ -633,6 +412,70 @@
       openSpriteEditor: (id,size)=>{ openSpriteModal(id,size); }
     };
     window.engine = engine;
+
+    // Procesador de código que maneja eventos y funciones
+    function generateRunner(code) {
+      const funcs = {};
+      const startStatements = [];
+      const keyEvents = [];
+      const collisionEvents = [];
+      
+      // Analizamos el código generado para extraer definiciones
+      const lines = code.split('\n');
+      let currentFunc = null;
+      for(let line of lines) {
+        if(line.includes('function_def')) {
+          // Extraer nombre de función
+          let match = line.match(/'([^']+)'/);
+          if(match) currentFunc = match[1];
+        } else if(line.includes('function_call')) {
+          // se maneja en ejecución
+        } else if(currentFunc) {
+          if(!funcs[currentFunc]) funcs[currentFunc] = [];
+          if(line.trim()) funcs[currentFunc].push(line);
+        }
+      }
+      
+      // Creamos un contexto de ejecución
+      const runContext = {
+        functions: funcs,
+        callFunction: (name) => {
+          if(funcs[name]) {
+            const funcBody = funcs[name].join('\n');
+            try { new Function('engine', 'console', funcBody)(engine, console); } catch(e) { logToConsole('Error en función '+name+': '+e.message, true); }
+          }
+        }
+      };
+      
+      // Creamos una función que ejecuta el código completo
+      return function() {
+        // Ejecutar definiciones de funciones (no hacen nada por sí solas)
+        // Buscar evento "Al Iniciar" y ejecutar sus statements
+        try {
+          const fullCode = Blockly.JavaScript.workspaceToCode(workspace);
+          // Ejecutar en un sandbox
+          const exec = new Function('engine', 'console', 'runtime', `
+            ${fullCode}
+            // Buscar bloques de evento start
+            if(typeof event_whenstart !== 'undefined') { /* no directo */ }
+          `);
+          exec(engine, console, runContext);
+        } catch(e) { logToConsole('Error general: '+e.message, true); }
+        renderCanvas();
+      };
+    }
+
+    // Ejecución principal
+    function executeCode() {
+      clearConsoleUI();
+      try {
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        const runner = generateRunner(code);
+        runner();
+      } catch(e) { logToConsole('Error al compilar: '+e.message, true); }
+    }
+    document.getElementById('runCodeBtn').onclick = executeCode;
+    document.getElementById('resetCanvasBtn').onclick = ()=>{ resetSimulation(); renderCanvas(); };
 
     // Modal sprite
     let currentSpriteId, currentSize=32, spriteData=[];
@@ -670,19 +513,6 @@
       renderCanvas(); modal.style.visibility='hidden';
     };
     document.getElementById('closeModalBtn').onclick = ()=> modal.style.visibility='hidden';
-
-    // Ejecución
-    function executeCode(){
-      clearConsoleUI();
-      try{
-        const code = Blockly.JavaScript.workspaceToCode(workspace);
-        const func = new Function('engine', 'console', 'log', code);
-        func(engine, console, logToConsole);
-        renderCanvas();
-      }catch(e){ logToConsole(e.message, true); }
-    }
-    document.getElementById('runCodeBtn').onclick = executeCode;
-    document.getElementById('resetCanvasBtn').onclick = ()=>{ resetSimulation(); renderCanvas(); };
 
     // Guardar / Importar
     function saveWorkspace(){
@@ -723,6 +553,13 @@
     document.getElementById('menuClearOutput').onclick = clearConsoleUI;
     document.getElementById('clearConsoleBtn').onclick = clearConsoleUI;
     renderCanvas();
+
+    // Ejecutar automáticamente al cargar si hay bloques "Al Iniciar"
+    window.addEventListener('load', ()=> {
+      setTimeout(()=> {
+        if(workspace.getAllBlocks().some(b=>b.type==='event_whenstart')) executeCode();
+      }, 200);
+    });
   })();
 </script>
 </body>
