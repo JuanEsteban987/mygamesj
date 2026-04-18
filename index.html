@@ -3,546 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor Multimedia Pro</title>
+    <title>Editor Multimedia Pro - Juan Estena Giraldo Pinto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --color-dark: #1a1a1a;
-            --color-dark-light: #2a2a2a;
-            --color-gray: #666666;
-            --color-light-gray: #e5e5e5;
-            --color-white: #ffffff;
-            --color-accent: #0088cc;
-            --color-accent-hover: #006699;
+            --color-dark: #121212;
+            --color-accent: #00d2ff;
+            --color-accent-dark: #0095b6;
+            --color-bg: #f4f7f6;
+            --color-card: #ffffff;
+            --color-text: #333;
         }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Raleway', sans-serif;
-            background: var(--color-white);
-            color: var(--color-dark);
-            line-height: 1.6;
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Raleway', sans-serif; background: var(--color-bg); color: var(--color-text); line-height: 1.6; }
 
         /* Header */
         header {
             background: var(--color-dark);
-            color: var(--color-white);
-            padding: 20px 0;
+            color: white;
+            padding: 15px 40px;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
+        .logo { font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: 1px; }
+        .author-tag { font-size: 0.75rem; color: var(--color-accent); font-style: italic; }
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
+        nav a:hover { color: var(--color-accent); }
 
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--color-white);
-            text-decoration: none;
-            font-weight: 400;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--color-accent);
-        }
-
-        /* Hero / Inicio Section */
-        .hero-section {
+        /* Hero / Inicio */
+        .hero {
             height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1470');
+            background-size: cover;
+            background-position: center;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1470') no-repeat center center/cover;
+            align-items: center;
             color: white;
             text-align: center;
-            padding: 0 20px;
+            padding: 20px;
         }
+        .hero h1 { font-family: 'Poppins', sans-serif; font-size: 3.5rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; }
 
-        .hero-content h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
+        /* Panel de Herramientas */
+        .panel-container { padding: 100px 20px; max-width: 1300px; margin: 0 auto; }
+        .panel-title { text-align: center; margin-bottom: 50px; }
+        .panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 30px; }
+        .card { background: var(--color-card); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-        /* Main Content */
-        .main-section {
-            padding: 80px 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        /* Controles */
+        .control-box { margin-bottom: 20px; }
+        .label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
+        input[type="range"] { width: 100%; accent-color: var(--color-accent); cursor: pointer; }
+        .preview-area { background: #000; border-radius: 8px; margin: 20px 0; min-height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        canvas { max-width: 100%; height: auto; }
 
-        .intro-section {
-            text-align: center;
-            margin-bottom: 80px;
-        }
+        /* Botones */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; transition: 0.3s; }
+        .btn-main { background: var(--color-accent); color: white; }
+        .btn-main:hover { background: var(--color-accent-dark); }
+        .btn-dark { background: var(--color-dark); color: white; }
 
-        .intro-section h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--color-dark);
-        }
+        /* Sección Funciones */
+        #funciones { background: white; padding: 80px 40px; margin-top: 50px; }
+        .func-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        .func-item h3 { color: var(--color-accent); margin-bottom: 10px; }
 
-        /* Grid */
-        .editors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-        }
+        /* Footer */
+        footer { background: var(--color-dark); color: white; padding: 40px; text-align: center; margin-top: 100px; }
 
-        .editor-card {
-            background: var(--color-white);
-            border: 1px solid var(--color-light-gray);
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
+        /* Muestra */
+        .sample-box { background: #eee; padding: 15px; border-radius: 8px; margin-top: 20px; }
 
-        .editor-card:hover {
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--color-light-gray);
-            padding-bottom: 10px;
-        }
-
-        /* Elements */
-        .upload-zone {
-            border: 2px dashed var(--color-light-gray);
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            background: #fafafa;
-            margin-bottom: 20px;
-        }
-
-        .preview-container {
-            min-height: 250px;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        #imageCanvas { max-width: 100%; height: auto; }
-
-        .control-group { margin-bottom: 15px; }
-        .control-label { font-size: 0.8rem; font-weight: bold; display: block; }
-        .value-display { float: right; color: var(--color-accent); }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
-        .btn-primary { background: var(--color-dark); color: white; }
-        .btn-primary:hover { background: var(--color-accent); }
-        .btn-secondary { background: #eee; color: #333; }
-
-        .toggle-group { display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
-
-        /* About Section */
-        #about {
-            background: #f9f9f9;
-            padding: 100px 40px;
-            text-align: center;
-        }
-        .about-container { max-width: 800px; margin: 0 auto; }
-
-        @media (max-width: 768px) {
-            .editors-grid { grid-template-columns: 1fr; }
-            .hero-content h1 { font-size: 2.5rem; }
-        }
+        @media (max-width: 600px) { .panel-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 2rem; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-content">
-            <div class="logo">ULTRA-EDIT</div>
-            <nav>
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#image">Imagen</a></li>
-                    <li><a href="#audio">Audio</a></li>
-                    <li><a href="#about">Acerca de</a></li>
-                </ul>
-            </nav>
+        <div class="logo">
+            MULTIMEDIA STUDIO
+            <div class="author-tag">By Juan Estena Giraldo Pinto</div>
         </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#herramientas">Herramientas</a></li>
+                <li><a href="#funciones">Funciones</a></li>
+                <li><a href="#about">Acerca de</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <section id="inicio" class="hero-section">
-        <div class="hero-content">
-            <h1>Crea. Edita. Transforma.</h1>
-            <p>La herramienta definitiva para potenciar tus archivos multimedia desde el navegador.</p>
-            <div class="button-group" style="justify-content: center; display: flex; margin-top: 30px;">
-                <a href="#image" class="btn btn-primary" style="text-decoration: none;">Editar Foto</a>
-                <a href="#audio" class="btn btn-secondary" style="text-decoration: none; margin-left: 10px;">Editar Audio</a>
+    <section id="inicio" class="hero">
+        <h1>Transforma tu Multimedia</h1>
+        <p>Edición profesional de imagen y sonido directamente desde tu navegador. Rápido, seguro y gratuito.</p>
+        <div class="btn-group">
+            <a href="#herramientas" class="btn btn-main" style="text-decoration: none;">Abrir Panel de Edición</a>
+        </div>
+    </section>
+
+    <section id="herramientas" class="panel-container">
+        <div class="panel-title">
+            <h2>Panel de Control Maestro</h2>
+            <p>Carga tus archivos y aplica efectos avanzados</p>
+        </div>
+
+        <div class="panel-grid">
+            <div class="card">
+                <h3>🖼️ Procesador de Imagen</h3>
+                <input type="file" id="imgInput" accept="image/*" style="margin: 15px 0;">
+                
+                <div class="preview-area" id="imgPreview">
+                    <canvas id="mainCanvas"></canvas>
+                </div>
+
+                <div class="control-grid">
+                    <div class="control-box">
+                        <div class="label-row"><span>Brillo</span><span id="bVal">100%</span></div>
+                        <input type="range" id="bRange" min="0" max="200" value="100">
+                    </div>
+                    <div class="control-box">
+                        <div class="label-row"><span>Contraste</span><span id="cVal">100%</span></div>
+                        <input type="range" id="cRange" min="0" max="200" value="100">
+                    </div>
+                    <div class="control-box">
+                        <div class="label-row"><span>Saturación</span><span id="sVal">100%</span></div>
+                        <input type="range" id="sRange" min="0" max="200" value="100">
+                    </div>
+                    <div class="control-box">
+                        <div class="label-row"><span>Viñeta</span><span id="vVal">0%</span></div>
+                        <input type="range" id="vRange" min="0" max="100" value="0">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-dark" onclick="applyFilter('grayscale(100%)')">B/N</button>
+                    <button class="btn btn-dark" onclick="applyFilter('sepia(100%) contrast(120%)')">Vintage</button>
+                    <button class="btn btn-dark" onclick="applyFilter('hue-rotate(180deg)')">Invertir Tono</button>
+                    <button class="btn btn-main" id="downloadImg">Descargar Imagen</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎵 Procesador de Audio</h3>
+                <input type="file" id="audioInput" accept="audio/*" style="margin: 15px 0;">
+                
+                <div class="preview-area" style="flex-direction: column; color: white; text-align: center;">
+                    <div id="waveDisplay">Visualizador Activo</div>
+                    <audio id="mainAudio" controls style="width: 80%; margin-top: 10px;"></audio>
+                </div>
+
+                <div class="control-grid">
+                    <div class="control-box">
+                        <div class="label-row"><span>Volumen Maestro</span><span id="volVal">1.0</span></div>
+                        <input type="range" id="volRange" min="0" max="2" step="0.1" value="1">
+                    </div>
+                    <div class="control-box">
+                        <div class="label-row"><span>Velocidad</span><span id="speedVal">1.0x</span></div>
+                        <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+                    <div class="control-box">
+                        <div class="label-row"><span>Panorámica (L/R)</span><span id="panVal">Centro</span></div>
+                        <input type="range" id="panRange" min="-1" max="1" step="0.1" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label><input type="checkbox" id="compressorCheck"> Compresor de Limiting</label>
+                    </div>
+                </div>
+
+                <div class="sample-box">
+                    <strong>Archivo de Muestra:</strong>
+                    <p style="font-size: 0.8rem; margin-bottom: 5px;">Escucha "m.mp3" para probar los efectos:</p>
+                    <audio src="m.mp3" controls style="width: 100%; height: 30px;"></audio>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-main" id="renderAudio">Procesar y Descargar WAV</button>
+                    <button class="btn btn-dark" onclick="resetAudio()">Resetear Audio</button>
+                </div>
             </div>
         </div>
     </section>
 
-    <div class="main-section">
-        <div class="intro-section">
-            <h1>Herramientas Profesionales</h1>
-            <p>Selecciona un módulo para comenzar a trabajar en tus proyectos.</p>
-        </div>
-
-        <div class="editors-grid">
-            <div class="editor-card" id="image">
-                <div class="card-header">
-                    <div class="card-icon">🖼️</div>
-                    <h2 class="card-title">Editor de Imagen Pro</h2>
+    <section id="funciones">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <h2 style="text-align: center;">Funciones de la Página</h2>
+            <div class="func-grid">
+                <div class="func-item">
+                    <h3>Procesamiento Real-Time</h3>
+                    <p>Todos los efectos de imagen se aplican mediante aceleración de hardware por GPU usando Canvas API.</p>
                 </div>
-
-                <div class="upload-zone" id="imageUploadZone">
-                    <div>📁 Arrastra o selecciona imagen</div>
-                    <input type="file" id="imageInput" accept="image/*" style="display:none">
+                <div class="func-item">
+                    <h3>Web Audio Engine</h3>
+                    <p>Manipulación de frecuencia, ganancia y panorámica estéreo sin pérdida de fidelidad.</p>
                 </div>
-
-                <div class="preview-container">
-                    <canvas id="imageCanvas"></canvas>
+                <div class="func-item">
+                    <h3>Privacidad Total</h3>
+                    <p>Tus archivos no se suben a ningún servidor; todo el proceso ocurre localmente en tu equipo.</p>
                 </div>
-
-                <div class="controls-section">
-                    <div class="control-group">
-                        <label class="control-label">Zoom <span class="value-display" id="scaleValue">100%</span></label>
-                        <input type="range" id="scaleSlider" min="10" max="200" value="100">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Brillo <span class="value-display" id="brightnessValue">100%</span></label>
-                        <input type="range" id="brightnessSlider" min="0" max="200" value="100">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Saturación <span class="value-display" id="saturateValue">100%</span></label>
-                        <input type="range" id="saturateSlider" min="0" max="200" value="100">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Contraste <span class="value-display" id="contrastValue">100%</span></label>
-                        <input type="range" id="contrastSlider" min="0" max="200" value="100">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Desenfoque <span class="value-display" id="blurValue">0px</span></label>
-                        <input type="range" id="blurSlider" min="0" max="10" value="0">
-                    </div>
-
-                    <div class="toggle-group">
-                        <button class="btn btn-secondary btn-sm" onclick="applyPreset('sepia(1)')">Sepia</button>
-                        <button class="btn btn-secondary btn-sm" onclick="applyPreset('grayscale(1)')">B/N</button>
-                        <button class="btn btn-secondary btn-sm" onclick="applyPreset('invert(1)')">Invertir</button>
-                        <button class="btn btn-secondary btn-sm" onclick="applyPreset('hue-rotate(90deg)')">Tono</button>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn btn-primary" id="downloadImage" disabled>Guardar PNG</button>
-                        <button class="btn btn-secondary" id="resetImage" disabled>Reiniciar</button>
-                    </div>
+                <div class="func-item">
+                    <h3>Exportación HQ</h3>
+                    <p>Descarga tus resultados en formatos PNG de alta definición y archivos de audio WAV sin compresión.</p>
                 </div>
             </div>
-
-            <div class="editor-card" id="audio">
-                <div class="card-header">
-                    <div class="card-icon">🎵</div>
-                    <h2 class="card-title">Editor de Audio Pro</h2>
-                </div>
-
-                <div class="upload-zone" id="audioUploadZone">
-                    <div>📁 Cargar archivo de audio</div>
-                    <input type="file" id="audioInput" accept="audio/*" style="display:none">
-                </div>
-
-                <div class="preview-container" style="flex-direction: column; padding: 20px;">
-                    <audio id="audioPlayer" controls class="audio-player" style="display: none; width: 100%;"></audio>
-                    <p id="audioStatus" style="font-size: 0.8rem; margin-top: 10px; color: var(--color-gray);">No hay audio cargado</p>
-                </div>
-
-                <div class="controls-section">
-                    <div class="control-group">
-                        <label class="control-label">Velocidad <span class="value-display" id="speedValue">1.0x</span></label>
-                        <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Tono (Pitch) <span class="value-display" id="pitchValue">0</span></label>
-                        <input type="range" id="pitchSlider" min="-12" max="12" step="1" value="0">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Bajos (Bass) <span class="value-display" id="bassValue">0dB</span></label>
-                        <input type="range" id="bassSlider" min="-10" max="10" value="0">
-                    </div>
-
-                    <div class="toggle-group">
-                        <label><input type="checkbox" id="echoToggle"> Eco</label>
-                        <label><input type="checkbox" id="crunchyToggle"> Distorsión</label>
-                        <label><input type="checkbox" id="reverbToggle"> Reverb</label>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn btn-primary" id="previewAudio" disabled>Procesar & Oír</button>
-                        <button class="btn btn-primary" id="downloadAudio" disabled>Descargar .WAV</button>
-                        <button class="btn btn-secondary" id="resetAudio" disabled>Reset</button>
-                    </div>
-                    <div id="audioProcessing" class="info-text" style="display:none; color: orange; margin-top: 10px;">Procesando filtros...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section id="about">
-        <div class="about-container">
-            <h2>Acerca de esta Plataforma</h2>
-            <p style="margin-top: 20px; color: var(--color-gray);">
-                Esta es una página creada para el uso, edición y cambio de archivos de imagen o audio. Nuestro objetivo es proporcionar una herramienta ligera pero potente basada íntegramente en tecnologías web. Aquí puedes transformar tus fotografías con filtros avanzados de post-procesamiento o manipular pistas de audio utilizando la API de Web Audio para efectos en tiempo real.
-            </p>
-            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600" alt="Work" style="width: 100%; border-radius: 10px; margin-top: 30px; filter: grayscale(0.5);">
         </div>
     </section>
+
+    <section id="about" style="padding: 100px 40px; background: #eee;">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2>Acerca de este Proyecto</h2>
+            <p style="margin: 20px 0;">Esta plataforma fue diseñada para democratizar el acceso a herramientas de edición multimedia. Ideal para creadores de contenido que necesitan ajustes rápidos sin instalar software pesado.</p>
+            <p><strong>Desarrollado por:</strong> Juan Estena Giraldo Pinto</p>
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600" style="width: 100%; border-radius: 12px; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Multimedia Studio Pro - Creado por <strong>Juan Estena Giraldo Pinto</strong></p>
+        <p style="font-size: 0.8rem; margin-top: 10px; color: #888;">Todos los derechos reservados. Desarrollado con JavaScript nativo.</p>
+    </footer>
 
     <script>
-        // ==================== LÓGICA DE IMAGEN ====================
-        let imgObj = null;
-        const canvas = document.getElementById('imageCanvas');
+        // --- LOGICA IMAGEN ---
+        const canvas = document.getElementById('mainCanvas');
         const ctx = canvas.getContext('2d');
-        let currentPreset = "";
+        let activeImg = null;
+        let activeFilter = "";
 
-        document.getElementById('imageUploadZone').onclick = () => document.getElementById('imageInput').click();
-        document.getElementById('imageInput').onchange = (e) => {
+        document.getElementById('imgInput').onchange = (e) => {
             const reader = new FileReader();
             reader.onload = (event) => {
-                imgObj = new Image();
-                imgObj.onload = () => {
-                    canvas.width = imgObj.width;
-                    canvas.height = imgObj.height;
-                    updateImage();
-                    document.getElementById('downloadImage').disabled = false;
-                    document.getElementById('resetImage').disabled = false;
+                activeImg = new Image();
+                activeImg.onload = () => {
+                    canvas.width = activeImg.width;
+                    canvas.height = activeImg.height;
+                    updateImg();
                 };
-                imgObj.src = event.target.result;
+                activeImg.src = event.target.result;
             };
             reader.readAsDataURL(e.target.files[0]);
         };
 
-        function updateImage() {
-            if(!imgObj) return;
-            const scale = document.getElementById('scaleSlider').value / 100;
-            const b = document.getElementById('brightnessSlider').value;
-            const s = document.getElementById('saturateSlider').value;
-            const c = document.getElementById('contrastSlider').value;
-            const bl = document.getElementById('blurSlider').value;
+        function updateImg() {
+            if(!activeImg) return;
+            const b = document.getElementById('bRange').value;
+            const c = document.getElementById('cRange').value;
+            const s = document.getElementById('sRange').value;
+            const v = document.getElementById('vRange').value;
 
-            canvas.width = imgObj.width * scale;
-            canvas.height = imgObj.height * scale;
-            
-            ctx.filter = `brightness(${b}%) saturate(${s}%) contrast(${c}%) blur(${bl}px) ${currentPreset}`;
-            ctx.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%) ${activeFilter}`;
+            ctx.drawImage(activeImg, 0, 0);
+
+            if(v > 0) {
+                const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/1.2);
+                grad.addColorStop(0, 'transparent');
+                grad.addColorStop(1, `rgba(0,0,0,${v/100})`);
+                ctx.fillStyle = grad;
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+            }
         }
 
-        function applyPreset(filter) {
-            currentPreset = filter;
-            updateImage();
-        }
+        function applyFilter(f) { activeFilter = f; updateImg(); }
 
-        ['scaleSlider', 'brightnessSlider', 'saturateSlider', 'contrastSlider', 'blurSlider'].forEach(id => {
+        ['bRange', 'cRange', 'sRange', 'vRange'].forEach(id => {
             document.getElementById(id).oninput = (e) => {
-                const suffix = id.includes('blur') ? 'px' : (id.includes('scale') || id.includes('Value') ? '%' : '%');
-                document.getElementById(id.replace('Slider', 'Value')).textContent = e.target.value + (id.includes('blur') ? 'px' : '%');
-                updateImage();
+                document.getElementById(id.replace('Range','Val')).textContent = e.target.value + '%';
+                updateImg();
             };
         });
 
-        document.getElementById('resetImage').onclick = () => {
-            currentPreset = "";
-            document.querySelectorAll('.controls-section input[type=range]').forEach(r => r.value = r.getAttribute('value'));
-            updateImage();
-        };
-
-        document.getElementById('downloadImage').onclick = () => {
+        document.getElementById('downloadImg').onclick = () => {
             const link = document.createElement('a');
-            link.download = 'edit.png';
+            link.download = "editado_juan_estena.png";
             link.href = canvas.toDataURL();
             link.click();
         };
 
-        // ==================== LÓGICA DE AUDIO ====================
-        let audioCtx = null;
-        let originalBuffer = null;
-        const player = document.getElementById('audioPlayer');
+        // --- LOGICA AUDIO ---
+        let audioCtx, source, gainNode, panNode;
+        const audioPlayer = document.getElementById('mainAudio');
 
-        document.getElementById('audioUploadZone').onclick = () => document.getElementById('audioInput').click();
-        document.getElementById('audioInput').onchange = async (e) => {
-            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        document.getElementById('audioInput').onchange = (e) => {
             const file = e.target.files[0];
-            const arrayBuffer = await file.arrayBuffer();
-            originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-            
-            player.src = URL.createObjectURL(file);
-            player.style.display = 'block';
-            document.getElementById('audioStatus').textContent = "Audio listo: " + file.name;
-            document.getElementById('previewAudio').disabled = false;
-            document.getElementById('downloadAudio').disabled = false;
-            document.getElementById('resetAudio').disabled = false;
+            audioPlayer.src = URL.createObjectURL(file);
+            setupAudio();
         };
 
-        // Función para aplicar efectos y generar nuevo buffer
-        async function processAudio(isDownload = false) {
-            document.getElementById('audioProcessing').style.display = 'block';
-            const offlineCtx = new OfflineAudioContext(
-                originalBuffer.numberOfChannels,
-                originalBuffer.length / (isDownload ? 1 : 1), // Simplificado
-                originalBuffer.sampleRate
-            );
-
-            const source = offlineCtx.createBufferSource();
-            source.buffer = originalBuffer;
-
-            // Pitch & Speed
-            source.playbackRate.value = parseFloat(document.getElementById('speedSlider').value);
-            
-            // Bass/Treble EQ
-            const bass = offlineCtx.createBiquadFilter();
-            bass.type = "lowshelf";
-            bass.frequency.value = 200;
-            bass.gain.value = parseFloat(document.getElementById('bassSlider').value);
-
-            let lastNode = source;
-
-            // Eco
-            if(document.getElementById('echoToggle').checked) {
-                const delay = offlineCtx.createDelay();
-                delay.delayTime.value = 0.3;
-                const feedback = offlineCtx.createGain();
-                feedback.gain.value = 0.4;
-                lastNode.connect(delay);
-                delay.connect(feedback);
-                feedback.connect(delay);
-                delay.connect(offlineCtx.destination);
+        function setupAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                source = audioCtx.createMediaElementSource(audioPlayer);
+                gainNode = audioCtx.createGain();
+                panNode = audioCtx.createStereoPanner();
+                source.connect(gainNode).connect(panNode).connect(audioCtx.destination);
             }
-
-            // Distorsión (Crunchy)
-            if(document.getElementById('crunchyToggle').checked) {
-                const dist = offlineCtx.createWaveShaper();
-                dist.curve = makeDistortionCurve(400);
-                lastNode.connect(dist);
-                lastNode = dist;
-            }
-
-            lastNode.connect(bass);
-            bass.connect(offlineCtx.destination);
-            source.start(0);
-
-            const renderedBuffer = await offlineCtx.startRendering();
-            document.getElementById('audioProcessing').style.display = 'none';
-            return renderedBuffer;
         }
 
-        document.getElementById('previewAudio').onclick = async () => {
-            const editedBuffer = await processAudio();
-            const wavData = audioBufferToWav(editedBuffer);
-            const blob = new Blob([wavData], { type: 'audio/wav' });
-            player.src = URL.createObjectURL(blob);
-            player.play();
+        document.getElementById('volRange').oninput = (e) => {
+            if(gainNode) gainNode.gain.value = e.target.value;
+            document.getElementById('volVal').textContent = e.target.value;
         };
 
-        document.getElementById('downloadAudio').onclick = async () => {
-            const editedBuffer = await processAudio(true);
-            const wavData = audioBufferToWav(editedBuffer);
-            const blob = new Blob([wavData], { type: 'audio/wav' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "audio_editado.wav";
-            a.click();
+        document.getElementById('speedRange').oninput = (e) => {
+            audioPlayer.playbackRate = e.target.value;
+            document.getElementById('speedVal').textContent = e.target.value + 'x';
         };
 
-        function makeDistortionCurve(amount) {
-            const k = amount, n_samples = 44100, curve = new Float32Array(n_samples);
-            for (let i = 0 ; i < n_samples; ++i ) {
-                const x = i * 2 / n_samples - 1;
-                curve[i] = ( 3 + k ) * x * 20 * (Math.PI/180) / ( Math.PI + k * Math.abs(x) );
-            }
-            return curve;
+        document.getElementById('panRange').oninput = (e) => {
+            if(panNode) panNode.pan.value = e.target.value;
+            const v = e.target.value;
+            document.getElementById('panVal').textContent = v == 0 ? "Centro" : (v < 0 ? "Izquierda" : "Derecha");
+        };
+
+        function resetAudio() {
+            audioPlayer.playbackRate = 1;
+            if(gainNode) gainNode.gain.value = 1;
+            if(panNode) panNode.pan.value = 0;
+            document.querySelectorAll('#audio input[type=range]').forEach(r => r.value = 1);
         }
-
-        // Helper para convertir Buffer a WAV (simplificado)
-        function audioBufferToWav(buffer) {
-            let numOfChan = buffer.numberOfChannels,
-                length = buffer.length * numOfChan * 2 + 44,
-                bufferWav = new ArrayBuffer(length),
-                view = new DataView(bufferWav),
-                channels = [], i, sample,
-                offset = 0,
-                pos = 0;
-
-            function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
-            function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
-
-            setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157);
-            setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(numOfChan);
-            setUint32(buffer.sampleRate); setUint32(buffer.sampleRate * 2 * numOfChan);
-            setUint16(numOfChan * 2); setUint16(16); setUint32(0x61746164); setUint32(length - pos - 4);
-
-            for(i=0; i<numOfChan; i++) channels.push(buffer.getChannelData(i));
-            while(pos < length) {
-                for(i=0; i<numOfChan; i++) {
-                    sample = Math.max(-1, Math.min(1, channels[i][offset]));
-                    sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);
-                    view.setInt16(pos, sample, true);
-                    pos += 2;
-                }
-                offset++;
-            }
-            return bufferWav;
-        }
-
-        document.getElementById('speedSlider').oninput = (e) => {
-            document.getElementById('speedValue').textContent = e.target.value + 'x';
-        };
     </script>
 </body>
 </html>
