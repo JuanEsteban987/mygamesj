@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARCANIC MAGIC · Dungeon Block Studio</title>
-  <!-- Fuentes -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-  <!-- Blockly -->
   <script src="https://unpkg.com/blockly@10.4.0/blockly.min.js"></script>
   <script src="https://unpkg.com/blockly@10.4.0/blocks.min.js"></script>
   <script src="https://unpkg.com/blockly@10.4.0/javascript.min.js"></script>
@@ -16,21 +12,14 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0c0f;
-      background-image: 
-        radial-gradient(circle at 30% 40%, #1e2a1e20 0%, transparent 30%),
+      font-family: 'Inter', sans-serif; background: #0a0c0f;
+      background-image: radial-gradient(circle at 30% 40%, #1e2a1e20 0%, transparent 30%),
         repeating-linear-gradient(45deg, #0f120f 0px, #0f120f 2px, #151a15 2px, #151a15 8px);
-      color: #e3dcc7;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      color: #e3dcc7; height: 100vh; display: flex; flex-direction: column; overflow: hidden;
     }
-    h1, h2, h3, .brand-main, .dungeon-title { font-family: 'Cinzel', serif; font-weight: 600; letter-spacing: 2px; }
+    h1, h2, h3, .brand-main { font-family: 'Cinzel', serif; font-weight: 600; letter-spacing: 2px; }
     .app-header {
-      display: flex; align-items: center; padding: 12px 28px;
-      background: #0e1113e0; backdrop-filter: blur(10px);
+      display: flex; align-items: center; padding: 12px 28px; background: #0e1113e0; backdrop-filter: blur(10px);
       border-bottom: 3px solid #3a2e1f; box-shadow: 0 4px 20px #00000080, inset 0 1px 0 #6b5a3e40;
       z-index: 20; position: relative;
     }
@@ -42,13 +31,12 @@
       background: #1e1a14; border: 2px solid #6b5a3e; color: #d4c29b; font-size: 26px;
       cursor: pointer; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
       border-radius: 8px; box-shadow: inset 0 2px 5px #000000, 0 4px 0 #0a0806;
-      transition: all 0.1s; margin-right: 18px;
+      transition: 0.1s; margin-right: 18px;
     }
     .menu-btn:hover { background: #2f281e; color: #f5e7c6; border-color: #9e875f; transform: translateY(-2px); box-shadow: inset 0 2px 5px #000000, 0 6px 0 #0a0806; }
-    .menu-btn:active { transform: translateY(2px); box-shadow: inset 0 2px 5px #000000, 0 2px 0 #0a0806; }
     .brand { display: flex; align-items: baseline; gap: 8px; filter: drop-shadow(0 4px 4px black); }
     .brand-main {
-      font-size: 2.2rem; background: linear-gradient(135deg, #ebd5b3 0%, #b89b6b 60%, #dac292 100%);
+      font-size: 2.2rem; background: linear-gradient(135deg, #ebd5b3, #b89b6b, #dac292);
       -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 8px #aa8c54;
     }
     .brand-tag {
@@ -60,78 +48,49 @@
       background: #1f1b14; border: 2px solid #5f503a; color: #e3d5b8; padding: 8px 20px;
       border-radius: 40px; font-weight: 600; font-family: 'Cinzel', serif; font-size: 0.9rem;
       letter-spacing: 1px; cursor: pointer; box-shadow: inset 0 1px 3px #000000, 0 5px 0 #0d0b08;
-      transition: all 0.1s; display: flex; align-items: center; gap: 8px; text-transform: uppercase;
+      transition: 0.1s; display: flex; align-items: center; gap: 8px; text-transform: uppercase;
     }
     .action-btn:hover { background: #2f281c; border-color: #b89b6b; color: #fff2db; transform: translateY(-2px); box-shadow: inset 0 1px 3px #000000, 0 7px 0 #0d0b08; }
     .action-btn:active { transform: translateY(3px); box-shadow: inset 0 1px 3px #000000, 0 2px 0 #0d0b08; }
-    .run-btn { background: #5e3f2c; border-color: #c89f6e; color: #ffefcf; box-shadow: inset 0 1px 3px #2a1e14, 0 5px 0 #3b2a1a; }
+    .run-btn { background: #5e3f2c; border-color: #c89f6e; color: #ffefcf; }
     .run-btn:hover { background: #7a543b; border-color: #e4ba82; }
 
-    .start-menu-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: #040302b0; backdrop-filter: blur(8px); z-index:50; visibility: hidden; opacity:0; transition:0.25s; }
+    .start-menu-overlay { position: fixed; inset:0; background: #040302b0; backdrop-filter: blur(8px); z-index:50; visibility: hidden; opacity:0; transition:0.25s; }
     .start-menu {
       position: fixed; top:0; left:0; width:320px; height:100vh; background: #12100cee; backdrop-filter: blur(12px);
-      border-right: 6px solid #3e2f1d; box-shadow: 20px 0 40px #000000b0, inset -2px 0 0 #6b5a3e;
-      padding: 24px 16px; transform: translateX(-100%); transition: transform 0.3s; z-index:60;
-      display: flex; flex-direction: column; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><path fill="%233a2e1f" d="M0 0h1v1H0zM2 2h1v1H2z"/></svg>');
+      border-right: 6px solid #3e2f1d; box-shadow: 20px 0 40px #000000b0; padding: 24px 16px;
+      transform: translateX(-100%); transition: 0.3s; z-index:60; display: flex; flex-direction: column;
     }
     .start-menu.active { transform: translateX(0); }
     .start-menu-overlay.active { visibility: visible; opacity: 1; }
     .menu-profile { display: flex; align-items: center; gap: 16px; padding-bottom: 28px; border-bottom: 3px solid #5e4b32; margin-bottom: 24px; }
-    .avatar { width: 60px; height: 60px; background: #2e241a; border: 3px solid #b99e6b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-weight: 700; font-size: 26px; color: #ebd5b3; box-shadow: inset 0 0 10px black, 0 6px 0 #1e150e; }
+    .avatar { width: 60px; height: 60px; background: #2e241a; border: 3px solid #b99e6b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel'; font-weight: 700; font-size: 26px; color: #ebd5b3; box-shadow: inset 0 0 10px black, 0 6px 0 #1e150e; }
     .profile-text h3 { font-size: 1.4rem; color: #ebd5b3; }
-    .profile-text p { color: #b8a67c; font-size: 0.8rem; letter-spacing: 1px; }
+    .profile-text p { color: #b8a67c; font-size: 0.8rem; }
     .menu-items { display: flex; flex-direction: column; gap: 10px; flex:1; }
     .menu-item {
       display: flex; align-items: center; gap: 16px; padding: 16px 18px; background: #1e1812c0; border: 2px solid #5c4b33;
-      color: #e3d5b8; font-family: 'Cinzel', serif; font-weight: 600; font-size: 1rem; border-radius: 40px; cursor: pointer;
-      box-shadow: inset 0 1px 4px black, 0 5px 0 #1a130c; transition: all 0.1s; text-align: left; backdrop-filter: blur(4px);
+      color: #e3d5b8; font-family: 'Cinzel'; font-weight: 600; border-radius: 40px; cursor: pointer;
+      box-shadow: inset 0 1px 4px black, 0 5px 0 #1a130c; transition: 0.1s;
     }
     .menu-item:hover { background: #3f3222; border-color: #c9a96b; color: #ffefcf; transform: translateY(-2px); box-shadow: inset 0 1px 4px black, 0 7px 0 #1a130c; }
-    .menu-item .icon { font-size: 24px; width: 28px; }
     .menu-divider { margin: 20px 0; border-top: 2px dashed #7a6848; }
 
     .main-layout { flex:1; display:flex; overflow:hidden; }
-    .blockly-area { flex:2.2; height:100%; position:relative; background: #0c0e10; border-right: 4px solid #3a2e1f; box-shadow: inset 0 0 40px #000000; }
-    #blocklyDiv { height:100%; width:100%; position:absolute; top:0; left:0; }
-    .canvas-area {
-      flex:1.2; background: #0f0d0a; background-image: radial-gradient(circle at 20% 30%, #1f281e60 0%, transparent 50%);
-      border-left: 2px solid #624c2e; display:flex; flex-direction:column; padding:20px; overflow-y:auto;
-    }
-    .dungeon-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-    .dungeon-header h4 { font-family: 'Cinzel', serif; color: #dac292; font-size:1.4rem; text-shadow:0 0 8px #aa8c54; letter-spacing:3px; }
+    .blockly-area { flex:2.2; height:100%; position:relative; background: #0c0e10; border-right: 4px solid #3a2e1f; }
+    #blocklyDiv { height:100%; width:100%; position:absolute; }
+    .canvas-area { flex:1.2; background: #0f0d0a; border-left: 2px solid #624c2e; display:flex; flex-direction:column; padding:20px; }
     #gameCanvas {
-      background: #16120c; border-radius: 0px; border: 8px solid #2d2418;
-      box-shadow: inset 0 0 20px #000000, 0 10px 0 #0a0806, 0 0 0 2px #7a6848;
-      width: 100%; aspect-ratio: 1/1; image-rendering: crisp-edges; image-rendering: pixelated;
+      background: #16120c; border: 8px solid #2d2418; box-shadow: inset 0 0 20px black, 0 10px 0 #0a0806, 0 0 0 2px #7a6848;
+      width: 100%; aspect-ratio: 1/1; image-rendering: crisp-edges;
     }
-    .console-panel {
-      margin-top: 20px; background: #1e1812e0; backdrop-filter: blur(8px); border: 3px solid #5c4b33;
-      border-radius: 16px; padding: 14px 18px; box-shadow: inset 0 0 15px black, 0 6px 0 #1a130c;
-    }
-    .console-header { display:flex; justify-content:space-between; margin-bottom:10px; }
-    .console-header span { font-family: 'Cinzel', serif; color: #d4af7a; font-weight:600; }
-    #outputConsole {
-      font-family: 'Courier New', monospace; font-size: 13px; background: #0a0907; padding: 12px;
-      border-radius: 10px; max-height: 140px; overflow-y:auto; white-space:pre-wrap;
-      border: 1px solid #7a6848; color: #c0b79a; box-shadow: inset 0 0 10px black;
-    }
-    .clear-btn { background: none; border: 1px solid #7a6848; color: #ccbda0; padding: 4px 12px; border-radius: 30px; font-family: 'Cinzel', serif; cursor: pointer; }
-    .blocklyToolboxDiv { background: #191410 !important; border-right: 2px solid #5e4b32 !important; }
-    .blocklyFlyout { background: #1e1812 !important; border-right: 2px solid #7a6848 !important; }
-    .blocklyText { fill: #e3dcc7 !important; font-family: 'Inter' !important; }
-    .blocklyMainBackground { fill: #0e0c0a !important; }
+    .console-panel { margin-top: 20px; background: #1e1812e0; border:3px solid #5c4b33; border-radius:16px; padding:14px; }
+    #outputConsole { background:#0a0907; padding:12px; border-radius:10px; max-height:140px; overflow:auto; font-family:monospace; }
     .file-input-hidden { display:none; }
-
-    .modal {
-      position:fixed; top:0; left:0; width:100%; height:100%; background: #030201e0; backdrop-filter: blur(10px);
-      display:flex; align-items:center; justify-content:center; z-index:100; visibility:hidden;
-    }
-    .modal-content {
-      background: #1e1812; padding: 28px; border-radius: 32px; border: 4px solid #b99e6b;
-      box-shadow: 0 20px 0 #0a0806, inset 0 0 20px black; max-width: 550px; width:90%;
-    }
-    .pixel-grid { display:grid; gap:1px; background:#2b2218; padding:3px; border-radius:12px; }
-    .pixel { background:#0e0c0a; aspect-ratio:1/1; border-radius:2px; cursor:pointer; border:1px solid #4a3b2a; }
+    .modal { position:fixed; inset:0; background:#030201e0; backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; z-index:100; visibility:hidden; }
+    .modal-content { background:#1e1812; padding:28px; border-radius:32px; border:4px solid #b99e6b; max-width:550px; }
+    .pixel-grid { display:grid; gap:1px; background:#2b2218; padding:3px; }
+    .pixel { background:#0e0c0a; aspect-ratio:1/1; cursor:pointer; }
     .pixel.active { background:#c9a96b; }
   </style>
 </head>
@@ -139,10 +98,7 @@
 
 <header class="app-header">
   <button class="menu-btn" id="menuToggleBtn">☰</button>
-  <div class="brand">
-    <span class="brand-main">ARCANIC MAGIC</span>
-    <span class="brand-tag">· dungeon forge</span>
-  </div>
+  <div class="brand"><span class="brand-main">ARCANIC MAGIC</span><span class="brand-tag">· dungeon forge</span></div>
   <div class="header-actions">
     <button class="action-btn" id="saveProjectBtn">💾 Guardar</button>
     <button class="action-btn" id="loadProjectBtn">📂 Importar</button>
@@ -152,414 +108,274 @@
 
 <div class="start-menu-overlay" id="menuOverlay"></div>
 <nav class="start-menu" id="startMenu">
-  <div class="menu-profile">
-    <div class="avatar">DM</div>
-    <div class="profile-text"><h3>David Matias</h3><p>Arcanic Archmage</p></div>
-  </div>
+  <div class="menu-profile"><div class="avatar">JE</div><div class="profile-text"><h3>Juan Esteban</h3><p>Arcanic Archmage</p></div></div>
   <div class="menu-items">
-    <button class="menu-item" id="menuNewProject"><span class="icon">✨</span> Nuevo grimorio</button>
-    <button class="menu-item" id="menuLoadExample"><span class="icon">📜</span> Cargar hechizo</button>
+    <button class="menu-item" id="menuNewProject"><span>✨</span> Nuevo grimorio</button>
+    <button class="menu-item" id="menuLoadExample"><span>📜</span> Cargar hechizo (demo)</button>
     <div class="menu-divider"></div>
-    <button class="menu-item" id="menuSaveAs"><span class="icon">💾</span> Guardar como...</button>
-    <button class="menu-item" id="menuImport"><span class="icon">📂</span> Importar pergamino</button>
+    <button class="menu-item" id="menuSaveAs"><span>💾</span> Guardar como...</button>
+    <button class="menu-item" id="menuImport"><span>📂</span> Importar pergamino</button>
     <div class="menu-divider"></div>
-    <button class="menu-item" id="menuClearOutput"><span class="icon">🔥</span> Limpiar runas</button>
+    <button class="menu-item" id="menuClearOutput"><span>🔥</span> Limpiar runas</button>
   </div>
-  <div style="margin-top:auto; font-family:'Cinzel'; color:#b8a67c; padding:16px;">Creative Visual Designer<br>UI/UX · Branding · Runic</div>
 </nav>
 
-<input type="file" id="fileInput" accept=".xml,text/xml" class="file-input-hidden" />
+<input type="file" id="fileInput" accept=".xml" class="file-input-hidden" />
 
 <div class="main-layout">
   <div class="blockly-area"><div id="blocklyDiv"></div></div>
   <div class="canvas-area">
-    <div class="dungeon-header">
-      <h4>◈ SALA DE PRUEBAS ◈</h4>
-      <button class="action-btn" id="resetCanvasBtn" style="padding:6px 16px;">⟲ Purificar</button>
-    </div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><h4 style="font-family:'Cinzel'; color:#dac292;">◈ SALA DE PRUEBAS ◈</h4><button class="action-btn" id="resetCanvasBtn">⟲ Purificar</button></div>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div class="console-panel">
-      <div class="console-header"><span>📜 REGISTRO ARCANO</span><button class="clear-btn" id="clearConsoleBtn">limpiar</button></div>
-      <div id="outputConsole">// Invoca tus bloques y ejecuta...</div>
-    </div>
+    <div class="console-panel"><div style="display:flex; justify-content:space-between;"><span>📜 REGISTRO ARCANO</span><button id="clearConsoleBtn" class="action-btn" style="padding:2px 12px;">limpiar</button></div><div id="outputConsole">// Invoca tus bloques...</div></div>
   </div>
 </div>
 
+<!-- MODAL SPRITE -->
 <div class="modal" id="spriteModal">
   <div class="modal-content">
-    <h3 style="font-family:'Cinzel'; color:#dac292; margin-bottom:20px;">🎨 TALLADO RÚNICO</h3>
-    <div style="display:flex; gap:20px; flex-wrap:wrap;">
-      <div>
-        <label style="color:#dac292;">Dimensión:</label>
-        <select id="spriteSizeSelect" style="background:#2b2218; color:white; border:2px solid #b99e6b; padding:6px; border-radius:8px;">
-          <option value="16">16x16</option><option value="32" selected>32x32</option><option value="64">64x64</option>
-        </select>
-        <div id="pixelGridContainer" style="margin-top:16px;"></div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:12px;">
-        <button id="clearSpriteBtn" class="action-btn">🧽 Borrar</button>
-        <button id="saveSpriteBtn" class="action-btn run-btn">✅ Imbuir</button>
-        <button id="closeModalBtn" class="action-btn">✖ Cerrar</button>
-      </div>
-    </div>
-    <p style="margin-top:16px; color:#b8a67c;">ID: <span id="editingSpriteId">-</span></p>
+    <h3 style="font-family:'Cinzel';">🎨 TALLADO RÚNICO</h3>
+    <select id="spriteSizeSelect"><option value="16">16x16</option><option value="32" selected>32x32</option><option value="64">64x64</option></select>
+    <div id="pixelGridContainer" style="margin:16px 0;"></div>
+    <button id="clearSpriteBtn">🧽 Borrar</button>
+    <button id="saveSpriteBtn" class="run-btn">✅ Imbuir</button>
+    <button id="closeModalBtn">✖ Cerrar</button>
+    <p>ID: <span id="editingSpriteId">-</span></p>
   </div>
 </div>
-
-<xml id="startBlocks" style="display:none">
-  <block type="event_whenstart" x="20" y="20"></block>
-</xml>
 
 <script>
   (function(){
-    "use strict";
     Blockly.setLocale(Blockly.Msg);
-
-    // ---------- MOTOR DE OBJETOS ----------
+    
+    // ---------- MOTOR ----------
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const gameObjects = new Map();
     const outputConsole = document.getElementById('outputConsole');
-    let animationFrame = null;
     
-    // Consola personalizada
-    function logToConsole(msg, isError=false) {
-      const line = document.createElement('div');
-      line.textContent = (isError?'❌ ':'> ') + msg;
-      line.style.color = isError ? '#e06c75' : '#c0b79a';
-      outputConsole.appendChild(line);
-      outputConsole.scrollTop = outputConsole.scrollHeight;
-    }
-    function clearConsoleUI() { outputConsole.innerHTML = '// Pergamino limpio.'; }
-    console.log = function(...args) { logToConsole(args.join(' ')); };
-
-    function renderCanvas() {
+    function log(msg, err){ const d=document.createElement('div'); d.textContent=(err?'❌ ':'> ')+msg; d.style.color=err?'#e06c75':'#c0b79a'; outputConsole.appendChild(d); }
+    function clearConsole(){ outputConsole.innerHTML = '// Pergamino limpio.'; }
+    console.log = (...a)=> log(a.join(' '));
+    
+    function render(){
       ctx.clearRect(0,0,400,400);
-      ctx.fillStyle = '#1e1a14'; ctx.fillRect(0,0,400,400);
-      ctx.strokeStyle = '#4a3e2e'; ctx.lineWidth = 1;
-      for(let i=0;i<=400;i+=20) {
-        ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
-      }
-      for(let obj of gameObjects.values()) {
-        if(obj.spriteDataURL) {
-          const img = new Image(); img.src = obj.spriteDataURL;
-          if(img.complete) ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
-          else img.onload = ()=> ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
+      ctx.fillStyle='#1e1a14'; ctx.fillRect(0,0,400,400);
+      ctx.strokeStyle='#4a3e2e'; ctx.lineWidth=1;
+      for(let i=0;i<=400;i+=20){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke(); }
+      for(let o of gameObjects.values()){
+        if(o.sprite){
+          const img = new Image(); img.src = o.sprite;
+          if(img.complete) ctx.drawImage(img, o.x, o.y, o.w, o.h);
+          else img.onload = ()=> ctx.drawImage(img, o.x, o.y, o.w, o.h);
         } else {
-          ctx.fillStyle = obj.color || '#b99e6b'; ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-          ctx.fillStyle = '#dac292'; ctx.font = 'bold 16px Cinzel'; ctx.fillText('⬩', obj.x+4, obj.y+18);
+          ctx.fillStyle = o.color || '#b99e6b'; ctx.fillRect(o.x, o.y, o.w, o.h);
         }
-        ctx.strokeStyle = '#b89b6b'; ctx.lineWidth = 2; ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
-        ctx.fillStyle = '#ebd5b3'; ctx.font = 'bold 10px Cinzel'; ctx.fillText(obj.id, obj.x+2, obj.y+12);
+        ctx.strokeStyle='#b89b6b'; ctx.lineWidth=2; ctx.strokeRect(o.x, o.y, o.w, o.h);
+        ctx.fillStyle='#ebd5b3'; ctx.font='bold 10px Cinzel'; ctx.fillText(o.id, o.x+2, o.y+12);
       }
     }
-    function resetSimulation() { gameObjects.clear(); renderCanvas(); }
 
-    // ---------- BLOQUES ----------
-    const COLORS = { MOVE:'#3d6b5d', OBJ:'#8b6b4d', EVENT:'#6d4f5c', FUNC:'#6d5a7c' };
-
-    Blockly.Blocks['move_x'] = {
-      init: function() {
-        this.appendValueInput('STEPS').setCheck('Number').appendField('Mover X');
-        this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.MOVE);
-      }
-    };
-    Blockly.JavaScript['move_x'] = function(block) {
-      let steps = Blockly.JavaScript.valueToCode(block, 'STEPS', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-      let id = block.getFieldValue('ID');
-      return `engine.moveX(${steps}, '${id}');\n`;
-    };
-    Blockly.Blocks['move_y'] = {
-      init: function() {
-        this.appendValueInput('STEPS').setCheck('Number').appendField('Mover Y');
-        this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.MOVE);
-      }
-    };
-    Blockly.JavaScript['move_y'] = function(block) {
-      let steps = Blockly.JavaScript.valueToCode(block, 'STEPS', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-      let id = block.getFieldValue('ID');
-      return `engine.moveY(${steps}, '${id}');\n`;
-    };
-
-    Blockly.Blocks['create_object'] = {
-      init: function() {
-        this.appendDummyInput().appendField('Crear Objeto').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.appendValueInput('X').setCheck('Number').appendField('X:');
-        this.appendValueInput('Y').setCheck('Number').appendField('Y:');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
-      }
-    };
-    Blockly.JavaScript['create_object'] = function(block) {
-      let id = block.getFieldValue('ID');
-      let x = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-      let y = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-      return `engine.createObject('${id}', ${x}, ${y});\n`;
-    };
-    Blockly.Blocks['set_size'] = {
-      init: function() {
-        this.appendDummyInput().appendField('Tamaño').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.appendValueInput('W').setCheck('Number').appendField('Ancho');
-        this.appendValueInput('H').setCheck('Number').appendField('Alto');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
-      }
-    };
-    Blockly.JavaScript['set_size'] = function(block) {
-      let id = block.getFieldValue('ID');
-      let w = Blockly.JavaScript.valueToCode(block, 'W', Blockly.JavaScript.ORDER_ATOMIC) || '20';
-      let h = Blockly.JavaScript.valueToCode(block, 'H', Blockly.JavaScript.ORDER_ATOMIC) || '20';
-      return `engine.setSize('${id}', ${w}, ${h});\n`;
-    };
-    Blockly.Blocks['set_color'] = {
-      init: function() {
-        this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldColour('#b99e6b'), 'COLOR');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
-      }
-    };
-    Blockly.JavaScript['set_color'] = function(block) {
-      let id = block.getFieldValue('ID');
-      let color = block.getFieldValue('COLOR');
-      return `engine.setColor('${id}', '${color}');\n`;
-    };
-    Blockly.Blocks['edit_sprite'] = {
-      init: function() {
-        this.appendDummyInput().appendField('Sprite').appendField(new Blockly.FieldTextInput('obj1'), 'ID');
-        this.appendDummyInput().appendField('Pixel').appendField(new Blockly.FieldDropdown([["16x16","16"],["32x32","32"],["64x64","64"]]), 'SIZE');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.OBJ);
-      }
-    };
-    Blockly.JavaScript['edit_sprite'] = function(block) {
-      let id = block.getFieldValue('ID');
-      let size = block.getFieldValue('SIZE');
-      return `engine.openSpriteEditor('${id}', ${size});\n`;
-    };
-
+    // ---------- BLOQUES (EXTENDIDO) ----------
+    const C = { MOVE:'#3d6b5d', OBJ:'#8b6b4d', EVENT:'#6d4f5c', FUNC:'#6d5a7c' };
+    // Mover X, Y
+    Blockly.Blocks['move_x'] = { init(){ this.appendValueInput('V').setCheck('Number').appendField('Mover X'); this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.MOVE); } };
+    Blockly.JavaScript['move_x'] = b=> `engine.moveX(${Blockly.JavaScript.valueToCode(b,'V',0)||0}, '${b.getFieldValue('ID')}');\n`;
+    Blockly.Blocks['move_y'] = { init(){ this.appendValueInput('V').setCheck('Number').appendField('Mover Y'); this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.MOVE); } };
+    Blockly.JavaScript['move_y'] = b=> `engine.moveY(${Blockly.JavaScript.valueToCode(b,'V',0)||0}, '${b.getFieldValue('ID')}');\n`;
+    // Crear objeto
+    Blockly.Blocks['create'] = { init(){ this.appendDummyInput().appendField('Crear Objeto').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.appendValueInput('X').setCheck('Number').appendField('X:'); this.appendValueInput('Y').setCheck('Number').appendField('Y:'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.OBJ); } };
+    Blockly.JavaScript['create'] = b=> `engine.create('${b.getFieldValue('ID')}', ${Blockly.JavaScript.valueToCode(b,'X',0)||0}, ${Blockly.JavaScript.valueToCode(b,'Y',0)||0});\n`;
+    // Tamaño
+    Blockly.Blocks['size'] = { init(){ this.appendDummyInput().appendField('Tamaño').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.appendValueInput('W').setCheck('Number').appendField('Ancho'); this.appendValueInput('H').setCheck('Number').appendField('Alto'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.OBJ); } };
+    Blockly.JavaScript['size'] = b=> `engine.size('${b.getFieldValue('ID')}', ${Blockly.JavaScript.valueToCode(b,'W',0)||20}, ${Blockly.JavaScript.valueToCode(b,'H',0)||20});\n`;
+    // Color
+    Blockly.Blocks['color'] = { init(){ this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.appendDummyInput().appendField('Color').appendField(new Blockly.FieldColour('#b99e6b'),'COLOR'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.OBJ); } };
+    Blockly.JavaScript['color'] = b=> `engine.color('${b.getFieldValue('ID')}', '${b.getFieldValue('COLOR')}');\n`;
+    // Sprite
+    Blockly.Blocks['sprite'] = { init(){ this.appendDummyInput().appendField('Sprite').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.appendDummyInput().appendField('Pixel').appendField(new Blockly.FieldDropdown([["16x16","16"],["32x32","32"],["64x64","64"]]),'SIZE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.OBJ); } };
+    Blockly.JavaScript['sprite'] = b=> `engine.openSprite('${b.getFieldValue('ID')}', ${b.getFieldValue('SIZE')});\n`;
+    // Rotar
+    Blockly.Blocks['rotate'] = { init(){ this.appendDummyInput().appendField('Rotar').appendField(new Blockly.FieldDropdown([["Izquierda","-1"],["Derecha","1"]]),'DIR'); this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.MOVE); } };
+    Blockly.JavaScript['rotate'] = b=> `engine.rotate(${b.getFieldValue('DIR')}, '${b.getFieldValue('ID')}');\n`;
+    // Ir a coordenadas
+    Blockly.Blocks['goto'] = { init(){ this.appendValueInput('X').setCheck('Number').appendField('Ir a X:'); this.appendValueInput('Y').setCheck('Number').appendField('Y:'); this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.MOVE); } };
+    Blockly.JavaScript['goto'] = b=> `engine.goto(${Blockly.JavaScript.valueToCode(b,'X',0)}, ${Blockly.JavaScript.valueToCode(b,'Y',0)}, '${b.getFieldValue('ID')}');\n`;
+    // Apuntar a
+    Blockly.Blocks['point'] = { init(){ this.appendValueInput('X').setCheck('Number').appendField('Apuntar a X:'); this.appendValueInput('Y').setCheck('Number').appendField('Y:'); this.appendDummyInput().appendField('ID').appendField(new Blockly.FieldTextInput('obj1'),'ID'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.MOVE); } };
+    Blockly.JavaScript['point'] = b=> `engine.point(${Blockly.JavaScript.valueToCode(b,'X',0)}, ${Blockly.JavaScript.valueToCode(b,'Y',0)}, '${b.getFieldValue('ID')}');\n`;
     // Eventos
-    Blockly.Blocks['event_whenstart'] = {
-      init: function() {
-        this.appendDummyInput().appendField('🔮 Al Iniciar');
-        this.setNextStatement(true,null); this.setColour(COLORS.EVENT);
-      }
-    };
-    Blockly.Blocks['event_keypress'] = {
-      init: function() {
-        this.appendDummyInput().appendField('⌨️ Al Presionar').appendField(new Blockly.FieldTextInput('Space'), 'KEY');
-        this.appendStatementInput('DO'); this.setColour(COLORS.EVENT);
-      }
-    };
-    Blockly.Blocks['event_collision'] = {
-      init: function() {
-        this.appendDummyInput().appendField('💥 Al Tocar').appendField(new Blockly.FieldTextInput('obj1'), 'ID1');
-        this.appendDummyInput().appendField('con').appendField(new Blockly.FieldTextInput('obj2'), 'ID2');
-        this.appendStatementInput('DO'); this.setColour(COLORS.EVENT);
-      }
-    };
-    Blockly.Blocks['function_def'] = {
-      init: function() {
-        this.appendDummyInput().appendField('📜 Función').appendField(new Blockly.FieldTextInput('miFuncion'), 'FUNC_ID');
-        this.appendStatementInput('BODY'); this.setColour(COLORS.FUNC);
-      }
-    };
-    Blockly.Blocks['function_call'] = {
-      init: function() {
-        this.appendDummyInput().appendField('✨ Invocar').appendField(new Blockly.FieldTextInput('miFuncion'), 'FUNC_ID');
-        this.setPreviousStatement(true,null); this.setNextStatement(true,null); this.setColour(COLORS.FUNC);
-      }
-    };
+    Blockly.Blocks['event_start'] = { init(){ this.appendDummyInput().appendField('🔮 Al Iniciar'); this.setNextStatement(true); this.setColour(C.EVENT); } };
+    Blockly.Blocks['event_key'] = { init(){ this.appendDummyInput().appendField('⌨️ Al Presionar').appendField(new Blockly.FieldTextInput('Space'),'KEY'); this.appendStatementInput('DO'); this.setColour(C.EVENT); } };
+    Blockly.Blocks['event_collide'] = { init(){ this.appendDummyInput().appendField('💥 Al Tocar').appendField(new Blockly.FieldTextInput('obj1'),'ID1'); this.appendDummyInput().appendField('con').appendField(new Blockly.FieldTextInput('obj2'),'ID2'); this.appendStatementInput('DO'); this.setColour(C.EVENT); } };
+    // Funciones
+    Blockly.Blocks['func_def'] = { init(){ this.appendDummyInput().appendField('📜 Función').appendField(new Blockly.FieldTextInput('miFuncion'),'NAME'); this.appendStatementInput('BODY'); this.setColour(C.FUNC); } };
+    Blockly.Blocks['func_call'] = { init(){ this.appendDummyInput().appendField('✨ Invocar').appendField(new Blockly.FieldTextInput('miFuncion'),'NAME'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.FUNC); } };
+    Blockly.JavaScript['func_call'] = b=> `await runtime.call('${b.getFieldValue('NAME')}');\n`;
 
     const toolbox = {
       kind: "categoryToolbox",
       contents: [
-        { kind: "category", name: "🔮 Eventos", colour: COLORS.EVENT, contents: [
-          { kind: "block", type: "event_whenstart" }, { kind: "block", type: "event_keypress" }, { kind: "block", type: "event_collision" }
-        ]},
-        { kind: "category", name: "🧱 Objetos", colour: COLORS.OBJ, contents: [
-          { kind: "block", type: "create_object" }, { kind: "block", type: "set_size" }, { kind: "block", type: "set_color" }, { kind: "block", type: "edit_sprite" }
-        ]},
-        { kind: "category", name: "⬆️ Movimiento", colour: COLORS.MOVE, contents: [
-          { kind: "block", type: "move_x" }, { kind: "block", type: "move_y" }
-        ]},
-        { kind: "category", name: "📜 Funciones", colour: COLORS.FUNC, contents: [
-          { kind: "block", type: "function_def" }, { kind: "block", type: "function_call" }
-        ]},
-        { kind: "sep" },
-        { kind: "category", name: "🔢 Matemáticas", colour: "#3d6b5d", contents: [
-          { kind: "block", type: "math_number" }, { kind: "block", type: "math_arithmetic" }
-        ]},
-        { kind: "category", name: "📝 Texto", colour: "#6d5a7c", contents: [
-          { kind: "block", type: "text" }, { kind: "block", type: "text_print" }
-        ]}
+        { kind:"category", name:"🔮 Eventos", colour:C.EVENT, contents:[ {kind:"block",type:"event_start"}, {kind:"block",type:"event_key"}, {kind:"block",type:"event_collide"} ] },
+        { kind:"category", name:"🧱 Objetos", colour:C.OBJ, contents:[ {kind:"block",type:"create"}, {kind:"block",type:"size"}, {kind:"block",type:"color"}, {kind:"block",type:"sprite"} ] },
+        { kind:"category", name:"⬆️ Movimiento", colour:C.MOVE, contents:[ {kind:"block",type:"move_x"}, {kind:"block",type:"move_y"}, {kind:"block",type:"goto"}, {kind:"block",type:"point"}, {kind:"block",type:"rotate"} ] },
+        { kind:"category", name:"📜 Funciones", colour:C.FUNC, contents:[ {kind:"block",type:"func_def"}, {kind:"block",type:"func_call"} ] },
+        { kind:"sep" },
+        { kind:"category", name:"🔢 Matemáticas", colour:"#3d6b5d", contents:[ {kind:"block",type:"math_number"}, {kind:"block",type:"math_arithmetic"} ] },
+        { kind:"category", name:"📝 Texto", colour:"#6d5a7c", contents:[ {kind:"block",type:"text"}, {kind:"block",type:"text_print"} ] }
       ]
     };
 
-    const workspace = Blockly.inject('blocklyDiv', { toolbox, scrollbars: true, trashcan: true, zoom: { controls: true } });
-    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
-
-    // Engine con funciones y eventos
-    const functionTable = {};
-    const keyHandlers = {};
-    const collisionChecks = [];
-
+    const workspace = Blockly.inject('blocklyDiv', { toolbox, scrollbars:true, trashcan:true, zoom:{controls:true} });
+    
+    // Engine completo
     const engine = {
-      moveX: (dx,id)=>{ if(gameObjects.has(id)){ gameObjects.get(id).x += Number(dx); renderCanvas(); } },
-      moveY: (dy,id)=>{ if(gameObjects.has(id)){ gameObjects.get(id).y += Number(dy); renderCanvas(); } },
-      createObject: (id,x,y)=>{ gameObjects.set(id, { id, x:Number(x), y:Number(y), width:30, height:30, color:'#b99e6b' }); renderCanvas(); },
-      setSize: (id,w,h)=>{ if(gameObjects.has(id)){ gameObjects.get(id).width = w; gameObjects.get(id).height = h; } renderCanvas(); },
-      setColor: (id,c)=>{ if(gameObjects.has(id)) gameObjects.get(id).color = c; renderCanvas(); },
-      openSpriteEditor: (id,size)=>{ openSpriteModal(id,size); }
+      moveX: (v,id)=>{ let o=gameObjects.get(id); if(o){ o.x+=Number(v); render(); } },
+      moveY: (v,id)=>{ let o=gameObjects.get(id); if(o){ o.y+=Number(v); render(); } },
+      create: (id,x,y)=>{ gameObjects.set(id, {id, x:Number(x), y:Number(y), w:30, h:30, color:'#b99e6b'}); render(); },
+      size: (id,w,h)=>{ let o=gameObjects.get(id); if(o){ o.w=Number(w); o.h=Number(h); render(); } },
+      color: (id,c)=>{ let o=gameObjects.get(id); if(o){ o.color=c; render(); } },
+      rotate: (dir,id)=>{ let o=gameObjects.get(id); if(o){ o.rotation = (o.rotation||0) + (dir==='1'? 15 : -15); render(); } },
+      goto: (x,y,id)=>{ let o=gameObjects.get(id); if(o){ o.x=Number(x); o.y=Number(y); render(); } },
+      point: (x,y,id)=>{ let o=gameObjects.get(id); if(o){ let dx=Number(x)-o.x, dy=Number(y)-o.y; o.rotation = Math.atan2(dy,dx)*180/Math.PI; render(); } },
+      openSprite: (id,size)=>{ openSpriteModal(id,size); }
     };
     window.engine = engine;
 
-    // Procesador de código que maneja eventos y funciones
-    function generateRunner(code) {
-      const funcs = {};
-      const startStatements = [];
-      const keyEvents = [];
-      const collisionEvents = [];
-      
-      // Analizamos el código generado para extraer definiciones
+    // Ejecución con eventos
+    const keyHandlers = {};
+    let runtime = { functions: {}, call: async (name)=>{ if(runtime.functions[name]) await runtime.functions[name](); } };
+    
+    async function executeProgram() {
+      clearConsole(); render();
+      // Reiniciar estado
+      const code = Blockly.JavaScript.workspaceToCode(workspace);
+      // Extraer definiciones de funciones
+      const funcDefs = {};
       const lines = code.split('\n');
       let currentFunc = null;
-      for(let line of lines) {
-        if(line.includes('function_def')) {
-          // Extraer nombre de función
-          let match = line.match(/'([^']+)'/);
-          if(match) currentFunc = match[1];
-        } else if(line.includes('function_call')) {
-          // se maneja en ejecución
-        } else if(currentFunc) {
-          if(!funcs[currentFunc]) funcs[currentFunc] = [];
-          if(line.trim()) funcs[currentFunc].push(line);
+      for(let line of lines){
+        if(line.includes('func_def')){ let m=line.match(/'([^']+)'/); if(m) currentFunc = m[1]; }
+        else if(currentFunc && line.trim()){ if(!funcDefs[currentFunc]) funcDefs[currentFunc]=[]; funcDefs[currentFunc].push(line); }
+      }
+      runtime.functions = {};
+      for(let n in funcDefs){
+        runtime.functions[n] = async ()=>{ 
+          try { await new Function('engine', 'console', 'runtime', funcDefs[n].join('\n'))(engine, console, runtime); } 
+          catch(e){ log('Error en función '+n+': '+e.message, true); }
+        };
+      }
+      
+      // Ejecutar evento start
+      const startBlocks = workspace.getBlocksByType('event_start');
+      for(let b of startBlocks){
+        let child = b.getNextBlock();
+        while(child){
+          let code = Blockly.JavaScript.blockToCode(child);
+          if(code){
+            try { await new Function('engine', 'console', 'runtime', code)(engine, console, runtime); } catch(e){ log(e.message, true); }
+          }
+          child = child.getNextBlock();
         }
       }
       
-      // Creamos un contexto de ejecución
-      const runContext = {
-        functions: funcs,
-        callFunction: (name) => {
-          if(funcs[name]) {
-            const funcBody = funcs[name].join('\n');
-            try { new Function('engine', 'console', funcBody)(engine, console); } catch(e) { logToConsole('Error en función '+name+': '+e.message, true); }
+      // Configurar eventos de tecla
+      window._keydown = (e)=>{
+        const key = e.key.length===1 ? e.key.toUpperCase() : e.key;
+        const blocks = workspace.getBlocksByType('event_key');
+        blocks.forEach(b=>{
+          if(b.getFieldValue('KEY').toUpperCase() === key){
+            let stmt = b.getInputTargetBlock('DO');
+            while(stmt){
+              try { new Function('engine', 'console', 'runtime', Blockly.JavaScript.blockToCode(stmt))(engine, console, runtime); } catch(er){}
+              stmt = stmt.getNextBlock();
+            }
           }
-        }
+        });
+        render();
       };
+      window.removeEventListener('keydown', window._keydown);
+      window.addEventListener('keydown', window._keydown);
       
-      // Creamos una función que ejecuta el código completo
-      return function() {
-        // Ejecutar definiciones de funciones (no hacen nada por sí solas)
-        // Buscar evento "Al Iniciar" y ejecutar sus statements
-        try {
-          const fullCode = Blockly.JavaScript.workspaceToCode(workspace);
-          // Ejecutar en un sandbox
-          const exec = new Function('engine', 'console', 'runtime', `
-            ${fullCode}
-            // Buscar bloques de evento start
-            if(typeof event_whenstart !== 'undefined') { /* no directo */ }
-          `);
-          exec(engine, console, runContext);
-        } catch(e) { logToConsole('Error general: '+e.message, true); }
-        renderCanvas();
-      };
+      // Colisiones (simple loop)
+      let collInterval = setInterval(()=>{
+        const blocks = workspace.getBlocksByType('event_collide');
+        blocks.forEach(b=>{
+          let id1 = b.getFieldValue('ID1'), id2 = b.getFieldValue('ID2');
+          let o1=gameObjects.get(id1), o2=gameObjects.get(id2);
+          if(o1 && o2 && !(o1.x+o1.w < o2.x || o2.x+o2.w < o1.x || o1.y+o1.h < o2.y || o2.y+o2.h < o1.y)){
+            let stmt = b.getInputTargetBlock('DO');
+            while(stmt){
+              try { new Function('engine', 'console', 'runtime', Blockly.JavaScript.blockToCode(stmt))(engine, console, runtime); } catch(er){}
+              stmt = stmt.getNextBlock();
+            }
+            render();
+          }
+        });
+      }, 200);
+      window._collInterval = collInterval;
     }
 
-    // Ejecución principal
-    function executeCode() {
-      clearConsoleUI();
-      try {
-        const code = Blockly.JavaScript.workspaceToCode(workspace);
-        const runner = generateRunner(code);
-        runner();
-      } catch(e) { logToConsole('Error al compilar: '+e.message, true); }
-    }
-    document.getElementById('runCodeBtn').onclick = executeCode;
-    document.getElementById('resetCanvasBtn').onclick = ()=>{ resetSimulation(); renderCanvas(); };
+    document.getElementById('runCodeBtn').onclick = ()=>{
+      if(window._collInterval) clearInterval(window._collInterval);
+      executeProgram();
+    };
+    document.getElementById('resetCanvasBtn').onclick = ()=>{ gameObjects.clear(); render(); };
 
     // Modal sprite
-    let currentSpriteId, currentSize=32, spriteData=[];
+    let currentId, size=32, data=[];
     const modal = document.getElementById('spriteModal');
-    function openSpriteModal(id,size){
-      currentSpriteId=id; currentSize=size;
-      document.getElementById('editingSpriteId').textContent=id;
-      buildPixelGrid(size);
-      modal.style.visibility='visible';
+    function openSpriteModal(id,sz){ currentId=id; size=sz; buildGrid(); modal.style.visibility='visible'; }
+    function buildGrid(){
+      const c=document.getElementById('pixelGridContainer'); c.innerHTML=''; data=Array(size*size).fill(false);
+      const g=document.createElement('div'); g.className='pixel-grid'; g.style.gridTemplateColumns=`repeat(${size},1fr)`; g.style.width='260px';
+      for(let i=0;i<size*size;i++){ const p=document.createElement('div'); p.className='pixel'; p.onclick=()=>{ data[i]=!data[i]; p.style.background=data[i]?'#c9a96b':'#0e0c0a'; }; g.appendChild(p); }
+      c.appendChild(g);
     }
-    function buildPixelGrid(s){
-      const cont = document.getElementById('pixelGridContainer');
-      cont.innerHTML=''; spriteData = Array(s*s).fill(false);
-      const grid = document.createElement('div'); grid.className='pixel-grid';
-      grid.style.gridTemplateColumns = `repeat(${s}, 1fr)`; grid.style.width='260px';
-      for(let i=0;i<s*s;i++){
-        const pix = document.createElement('div'); pix.className='pixel';
-        pix.addEventListener('click',()=>{
-          spriteData[i]=!spriteData[i];
-          pix.style.backgroundColor = spriteData[i] ? '#c9a96b' : '#0e0c0a';
-        });
-        grid.appendChild(pix);
-      }
-      cont.appendChild(grid);
-    }
-    document.getElementById('clearSpriteBtn').onclick = ()=> buildPixelGrid(currentSize);
+    document.getElementById('clearSpriteBtn').onclick = buildGrid;
     document.getElementById('saveSpriteBtn').onclick = ()=>{
-      const temp = document.createElement('canvas'); temp.width=currentSize; temp.height=currentSize;
-      const tCtx = temp.getContext('2d');
-      for(let i=0;i<currentSize*currentSize;i++) if(spriteData[i]){
-        tCtx.fillStyle='#c9a96b'; tCtx.fillRect(i%currentSize, Math.floor(i/currentSize),1,1);
-      }
-      const url = temp.toDataURL();
-      if(gameObjects.has(currentSpriteId)) gameObjects.get(currentSpriteId).spriteDataURL = url;
-      renderCanvas(); modal.style.visibility='hidden';
+      const tmp=document.createElement('canvas'); tmp.width=size; tmp.height=size; const t=tmp.getContext('2d');
+      for(let i=0;i<size*size;i++) if(data[i]){ t.fillStyle='#c9a96b'; t.fillRect(i%size, Math.floor(i/size),1,1); }
+      const url=tmp.toDataURL(); let o=gameObjects.get(currentId); if(o) o.sprite=url;
+      render(); modal.style.visibility='hidden';
     };
     document.getElementById('closeModalBtn').onclick = ()=> modal.style.visibility='hidden';
 
-    // Guardar / Importar
-    function saveWorkspace(){
-      const xml = Blockly.Xml.workspaceToDom(workspace);
-      const xmlText = Blockly.Xml.domToPrettyText(xml);
-      const blob = new Blob([xmlText],{type:'application/xml'});
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-      a.download = `arcanic_grimorio_${Date.now()}.xml`; a.click();
-    }
-    document.getElementById('saveProjectBtn').onclick = saveWorkspace;
-    document.getElementById('menuSaveAs').onclick = saveWorkspace;
+    // Guardar / importar / menú
+    function save(){ const x=Blockly.Xml.workspaceToDom(workspace); const b=new Blob([Blockly.Xml.domToPrettyText(x)],{type:'application/xml'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`grimorio.xml`; a.click(); }
+    document.getElementById('saveProjectBtn').onclick=save; document.getElementById('menuSaveAs').onclick=save;
     document.getElementById('loadProjectBtn').onclick = ()=> document.getElementById('fileInput').click();
     document.getElementById('menuImport').onclick = ()=> document.getElementById('fileInput').click();
-    document.getElementById('fileInput').onchange = (e)=>{
-      const file = e.target.files[0]; if(!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev)=>{ 
-        try{
-          const xml = Blockly.utils.xml.textToDom(ev.target.result);
-          workspace.clear(); Blockly.Xml.domToWorkspace(xml, workspace);
-        }catch(err){ logToConsole('Error importando: '+err,true); }
-      };
-      reader.readAsText(file);
-    };
-
-    // Menú lateral
-    const menu = document.getElementById('startMenu'), overlay = document.getElementById('menuOverlay');
-    document.getElementById('menuToggleBtn').onclick = ()=>{ menu.classList.add('active'); overlay.classList.add('active'); };
-    overlay.onclick = ()=>{ menu.classList.remove('active'); overlay.classList.remove('active'); };
+    document.getElementById('fileInput').onchange = (e)=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{ try{ const x=Blockly.utils.xml.textToDom(ev.target.result); workspace.clear(); Blockly.Xml.domToWorkspace(x,workspace); }catch(er){ log('Error importando',true); } }; r.readAsText(f); };
+    const menu=document.getElementById('startMenu'), overlay=document.getElementById('menuOverlay');
+    document.getElementById('menuToggleBtn').onclick=()=>{ menu.classList.add('active'); overlay.classList.add('active'); };
+    overlay.onclick=()=>{ menu.classList.remove('active'); overlay.classList.remove('active'); };
     document.querySelectorAll('.menu-item').forEach(b=>b.addEventListener('click',()=>{ menu.classList.remove('active'); overlay.classList.remove('active'); }));
-    document.getElementById('menuNewProject').onclick = ()=>{ if(confirm('¿Nuevo grimorio?')){ workspace.clear(); clearConsoleUI(); resetSimulation(); } };
+    document.getElementById('menuNewProject').onclick = ()=>{ if(confirm('¿Nuevo?')){ workspace.clear(); gameObjects.clear(); render(); clearConsole(); } };
+    document.getElementById('menuClearOutput').onclick = clearConsole;
+    document.getElementById('clearConsoleBtn').onclick = clearConsole;
+    
+    // EJEMPLO PRECARGADO
     document.getElementById('menuLoadExample').onclick = ()=>{
-      workspace.clear();
-      const example = `<xml><block type="event_whenstart"><next><block type="create_object"><field name="ID">cofre</field><value name="X"><block type="math_number"><field name="NUM">100</field></block></value><value name="Y"><block type="math_number"><field name="NUM">150</field></block></value><next><block type="set_color"><field name="ID">cofre</field><field name="COLOR">#8b5a2b</field></block></next></block></next></block></xml>`;
-      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(example), workspace);
-      clearConsoleUI(); resetSimulation();
+      workspace.clear(); gameObjects.clear(); render(); clearConsole();
+      const exampleXml = `<xml>
+        <block type="event_start" x="30" y="30"><next>
+          <block type="create"><field name="ID">jugador</field><value name="X"><block type="math_number"><field name="NUM">50</field></block></value><value name="Y"><block type="math_number"><field name="NUM">100</field></block></value><next>
+          <block type="create"><field name="ID">cofre</field><value name="X"><block type="math_number"><field name="NUM">200</field></block></value><value name="Y"><block type="math_number"><field name="NUM">150</field></block></value><next>
+          <block type="color"><field name="ID">jugador</field><field name="COLOR">#4a90e2</field><next>
+          <block type="color"><field name="ID">cofre</field><field name="COLOR">#8b5a2b</field></block></next></block></next></block></next></block>
+        </next></block>
+        <block type="event_key" x="30" y="200"><field name="KEY">w</field><statement name="DO"><block type="move_y"><value name="V"><block type="math_number"><field name="NUM">-10</field></block></value><field name="ID">jugador</field></block></statement></block>
+        <block type="event_key" x="30" y="260"><field name="KEY">s</field><statement name="DO"><block type="move_y"><value name="V"><block type="math_number"><field name="NUM">10</field></block></value><field name="ID">jugador</field></block></statement></block>
+        <block type="event_key" x="30" y="320"><field name="KEY">a</field><statement name="DO"><block type="move_x"><value name="V"><block type="math_number"><field name="NUM">-10</field></block></value><field name="ID">jugador</field></block></statement></block>
+        <block type="event_key" x="30" y="380"><field name="KEY">d</field><statement name="DO"><block type="move_x"><value name="V"><block type="math_number"><field name="NUM">10</field></block></value><field name="ID">jugador</field></block></statement></block>
+        <block type="event_collide" x="30" y="450"><field name="ID1">jugador</field><field name="ID2">cofre</field><statement name="DO"><block type="color"><field name="ID">cofre</field><field name="COLOR">#ffd700</field><next><block type="text_print"><value name="TEXT"><block type="text"><field name="TEXT">¡Cofre abierto!</field></block></value></block></next></block></statement></block>
+      </xml>`;
+      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(exampleXml), workspace);
+      log('✅ Ejemplo cargado: usa WASD para mover al jugador azul. Toca el cofre.');
     };
-    document.getElementById('menuClearOutput').onclick = clearConsoleUI;
-    document.getElementById('clearConsoleBtn').onclick = clearConsoleUI;
-    renderCanvas();
-
-    // Ejecutar automáticamente al cargar si hay bloques "Al Iniciar"
-    window.addEventListener('load', ()=> {
-      setTimeout(()=> {
-        if(workspace.getAllBlocks().some(b=>b.type==='event_whenstart')) executeCode();
-      }, 200);
-    });
+    
+    render();
   })();
 </script>
 </body>
