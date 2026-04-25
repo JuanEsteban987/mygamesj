@@ -1,554 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>🚀 Motor de Bloques · Completo y Estable</title>
-  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-  <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
-  <script src="https://unpkg.com/blockly/msg/es.js"></script>
-  <style>
-    body { margin:0; overflow:hidden; font-family:system-ui, sans-serif; background:#e9ecef; display:flex; flex-direction:column; height:100vh; }
-    .toolbar { background:#2c3e50; color:white; padding:8px 16px; display:flex; align-items:center; gap:12px; }
-    .toolbar button { padding:8px 18px; border:none; background:#ecf0f1; cursor:pointer; font-weight:bold; border-radius:6px; }
-    .toolbar .btn-stop { background:#e74c3c; color:white; }
-    .toolbar .btn-run { background:#2ecc71; color:white; }
-    .main { display:flex; flex:1; overflow:hidden; }
-    #blocklyDiv { flex:1; height:100%; }
-    .panel { width:440px; background:#f8f9fa; border-left:2px solid #adb5bd; display:flex; flex-direction:column; align-items:center; padding:12px; }
-    canvas { border:3px solid #495057; background:#fff; width:400px; height:300px; border-radius:8px; }
-    .info { margin-top:12px; background:#dee2e6; padding:8px 16px; font-family:monospace; font-size:16px; width:380px; display:flex; justify-content:space-around; border-radius:20px; }
-    #spriteModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; }
-    .modal-content { background:white; padding:20px; border-radius:12px; }
-    #pixel-grid { display:grid; grid-template-columns:repeat(16, 22px); gap:2px; background:#adb5bd; padding:4px; }
-    .pixel { width:22px; height:22px; cursor:pointer; border:1px solid #ced4da; }
-  </style>
+<meta charset="UTF-8">
+<title>Madness TABS 2D (PNG)</title>
+<style>
+body { margin:0; background:#111; color:white; text-align:center; }
+canvas { background:#222; display:block; margin:auto; cursor:crosshair; }
+button { margin:5px; padding:10px; }
+</style>
 </head>
 <body>
 
-<div class="toolbar">
-  <span style="font-weight:bold; font-size:18px;">🧩 BLOCKLY ENGINE · 60+ BLOQUES</span>
-  <div style="flex:1;"></div>
-  <button class="btn-stop" onclick="stopCode()">🛑 DETENER</button>
-  <button onclick="toggleModal()">🎨 EDITAR SPRITE</button>
-  <button class="btn-run" onclick="runCode()">▶ BANDERA VERDE</button>
-</div>
+<h2>Madness Battle Simulator 2D</h2>
 
-<div class="main">
-  <div id="blocklyDiv"></div>
-  <div class="panel">
-    <canvas id="gameCanvas" width="400" height="300"></canvas>
-    <div class="info">
-      <span>📍 X: <span id="uiX">0</span></span>
-      <span>📍 Y: <span id="uiY">0</span></span>
-      <span>🧭 <span id="uiD">90</span>°</span>
-    </div>
-    <div style="margin-top:8px; font-size:14px; display:flex; gap:20px;">
-      <span>👥 Clones: <span id="cloneCount">0</span></span>
-      <span>🎭 Disfraz: <span id="costumeIdx">1</span></span>
-    </div>
-  </div>
-</div>
+<button onclick="team='red'">Rojo</button>
+<button onclick="team='blue'">Azul</button>
+<button onclick="startBattle()">Iniciar</button>
 
-<div id="spriteModal">
-  <div class="modal-content">
-    <h3>✏️ Editor de Sprite 16x16</h3>
-    <div id="pixel-grid"></div>
-    <div style="margin-top:15px; display:flex; gap:10px; justify-content:center;">
-      <input type="color" id="colorPicker" value="#40bf4a">
-      <button onclick="clearSprite()">🧹 Limpiar</button>
-      <button onclick="toggleModal()">✅ Guardar</button>
-    </div>
-    <p style="margin:8px 0 0; font-size:13px;">Click = pintar · Click derecho = borrar</p>
-  </div>
-</div>
+<canvas id="game" width="800" height="500"></canvas>
 
 <script>
-  (function(){
-    "use strict";
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-    // ---------- CONFIGURACIÓN INICIAL ----------
-    const SIZE = 16, TOTAL = 256;
-    let spriteData = new Array(TOTAL).fill('#00000000');
-    // Sprite por defecto: cuadrado verde
-    for(let i=0; i<TOTAL; i++) {
-      let r = Math.floor(i/16), c = i%16;
-      if(r>=4 && r<=11 && c>=4 && c<=11) spriteData[i] = '#40bf4a';
+let units = [];
+let team = "red";
+let running = false;
+
+// cargar sprites PNG
+const sprites = {
+  head: loadImg("head.png"),
+  torso: loadImg("torso.png"),
+  handFront: loadImg("hand_front.png"),
+  handBack: loadImg("hand_back.png"),
+  foot: loadImg("foot.png")
+};
+
+function loadImg(src){
+  let img = new Image();
+  img.src = src;
+  return img;
+}
+
+class Unit {
+  constructor(x,y,team){
+    this.x=x;
+    this.y=y;
+    this.team=team;
+
+    this.hp=100;
+    this.speed=0.7;
+    this.attack=10;
+    this.range=25;
+
+    this.anim=0;
+  }
+
+  update(){
+    if(!running) return;
+
+    this.anim += 0.1;
+
+    let enemy=this.findEnemy();
+    if(!enemy) return;
+
+    let dx=enemy.x-this.x;
+    let dy=enemy.y-this.y;
+    let dist=Math.hypot(dx,dy);
+
+    if(dist>this.range){
+      this.x += dx/dist * this.speed;
+      this.y += dy/dist * this.speed;
+    } else {
+      enemy.hp -= 0.2;
     }
-    
-    // Sistema de disfraces (máximo 3)
-    let costumes = [spriteData.slice()];
-    let costumeIndex = 0;
-    
-    // Canvas
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // Estado del objeto principal
-    let posX = 200, posY = 150;
-    let direction = 90;
-    let visible = true;
-    let facingRight = true;
-    let isRunning = false;
-    let currentSayText = null;
-    let sayEndTime = 0;
-    
-    // Efectos gráficos
-    let efectoColor = 0;
-    let efectoDesvanecer = 100; // porcentaje
-    let efectoPixelado = 0;
-    
-    // Clones
-    let clones = [];
-    let nextCloneId = 1;
-    
-    // Mensajes (broadcast)
-    let messageBus = {};
-    
-    // Ratón
-    let mouseX = 0, mouseY = 0;
-    canvas.addEventListener('mousemove', (e) => { 
-      const rect = canvas.getBoundingClientRect(); 
-      mouseX = e.clientX - rect.left; 
-      mouseY = e.clientY - rect.top; 
-    });
-    
-    // UI
-    const uiX = document.getElementById('uiX');
-    const uiY = document.getElementById('uiY');
-    const uiD = document.getElementById('uiD');
-    const cloneSpan = document.getElementById('cloneCount');
-    const costumeSpan = document.getElementById('costumeIdx');
-    
-    // Conversión lógica <-> canvas (0,0 lógico es centro)
-    function logicToCanvasX(lx) { return 200 + lx; }
-    function logicToCanvasY(ly) { return 150 - ly; }
-    function canvasToLogicX(cx) { return cx - 200; }
-    function canvasToLogicY(cy) { return 150 - cy; }
-    
-    // ---------- DIBUJO ----------
-    function drawSprite(ctx, sprite, x, y, dir, flip, vis, say, alpha = 1.0) {
-      if(!vis) return;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate((dir - 90) * Math.PI / 180);
-      if(!flip) ctx.scale(-1, 1);
-      
-      ctx.globalAlpha = alpha * (efectoDesvanecer / 100);
-      sprite.forEach((color, i) => {
-        if(color && color !== '#00000000') {
-          let col = i % 16, row = Math.floor(i/16);
-          ctx.fillStyle = color;
-          ctx.fillRect(col*5 - 40, row*5 - 40, 5, 5);
-        }
-      });
-      ctx.restore();
-      
-      if(say) {
-        ctx.font = 'bold 14px system-ui, sans-serif';
-        let w = ctx.measureText(say).width + 24;
-        ctx.fillStyle = '#fff';
-        ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.roundRect(x - w/2, y - 85, w, 30, 10);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = '#1e1e2f';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(say, x, y - 70);
-        ctx.textAlign = 'left';
-      }
-      ctx.globalAlpha = 1.0;
+  }
+
+  findEnemy(){
+    let enemies=units.filter(u=>u.team!==this.team && u.hp>0);
+    let closest=null, min=99999;
+
+    for(let e of enemies){
+      let d=Math.hypot(this.x-e.x,this.y-e.y);
+      if(d<min){ min=d; closest=e; }
     }
-    
-    // Polyfill roundRect
-    if (!CanvasRenderingContext2D.prototype.roundRect) {
-      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-        if (w < 2 * r) r = w / 2;
-        if (h < 2 * r) r = h / 2;
-        this.moveTo(x + r, y);
-        this.lineTo(x + w - r, y);
-        this.quadraticCurveTo(x + w, y, x + w, y + r);
-        this.lineTo(x + w, y + h - r);
-        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        this.lineTo(x + r, y + h);
-        this.quadraticCurveTo(x, y + h, x, y + h - r);
-        this.lineTo(x, y + r);
-        this.quadraticCurveTo(x, y, x + r, y);
-        return this;
-      };
-    }
-    
-    function draw() {
-      ctx.clearRect(0, 0, 400, 300);
-      drawSprite(ctx, spriteData, posX, posY, direction, facingRight, visible, currentSayText);
-      clones.forEach(c => {
-        drawSprite(ctx, c.sprite, c.x, c.y, c.dir, c.flip, c.visible, c.say);
-      });
-      uiX.textContent = Math.round(canvasToLogicX(posX));
-      uiY.textContent = Math.round(canvasToLogicY(posY));
-      uiD.textContent = Math.round(direction);
-      cloneSpan.textContent = clones.length;
-      costumeSpan.textContent = costumeIndex + 1;
-    }
-    
-    // ---------- UTILIDADES ASÍNCRONAS ----------
-    function yieldFrame() { return new Promise(r => requestAnimationFrame(r)); }
-    function waitSecs(s) { return new Promise(r => setTimeout(r, s*1000)); }
-    
-    async function sayText(txt, sec) {
-      currentSayText = txt;
-      draw();
-      await waitSecs(sec);
-      currentSayText = null;
-      draw();
-    }
-    
-    function playSound(name) {
-      try {
-        const actx = new (window.AudioContext || window.webkitAudioContext)();
-        if(actx.state === 'suspended') actx.resume();
-        const osc = actx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.value = 440 + (name.length * 30);
-        osc.connect(actx.destination);
-        osc.start();
-        osc.stop(actx.currentTime + 0.2);
-      } catch(e) {}
-    }
-    
-    // Movimiento
-    function moveSteps(steps, obj = null) {
-      let target = obj || { posX, posY, direction, facingRight };
-      const rad = (target.direction - 90) * Math.PI / 180;
-      const dx = Math.cos(rad) * steps;
-      const dy = Math.sin(rad) * steps;
-      if(!obj) {
-        posX += dx; posY += dy;
-        if(dx > 0) facingRight = true;
-        else if(dx < 0) facingRight = false;
-      } else {
-        obj.x += dx; obj.y += dy;
-        if(dx > 0) obj.flip = true;
-        else if(dx < 0) obj.flip = false;
-      }
-    }
-    
-    function changeDir(deg, obj = null) {
-      if(!obj) {
-        direction = (direction + deg) % 360;
-        if(direction < 0) direction += 360;
-      } else {
-        obj.dir = (obj.dir + deg) % 360;
-        if(obj.dir < 0) obj.dir += 360;
-      }
-    }
-    
-    function setEffect(type, value) {
-      if(type === 'COLOR') efectoColor = Math.min(100, Math.max(0, value));
-      else if(type === 'DESVANECER') efectoDesvanecer = Math.min(100, Math.max(0, value));
-      draw();
-    }
-    
-    function changeEffect(type, delta) {
-      if(type === 'COLOR') efectoColor = Math.min(100, Math.max(0, efectoColor + delta));
-      else if(type === 'DESVANECER') efectoDesvanecer = Math.min(100, Math.max(0, efectoDesvanecer + delta));
-      draw();
-    }
-    
-    // Clones
-    function createClone() {
-      let clone = {
-        id: nextCloneId++,
-        x: posX, y: posY, dir: direction, flip: facingRight, visible: true,
-        sprite: spriteData.slice(),
-        say: null,
-        costumeIdx: costumeIndex
-      };
-      clones.push(clone);
-      draw();
-      return clone;
-    }
-    
-    function deleteClone(clone) {
-      clones = clones.filter(c => c !== clone);
-      draw();
-    }
-    
-    // Mensajes
-    function broadcast(msg) {
-      if(messageBus[msg]) {
-        messageBus[msg].forEach(cb => cb());
-      }
-    }
-    
-    function whenReceive(msg, callback) {
-      if(!messageBus[msg]) messageBus[msg] = [];
-      messageBus[msg].push(callback);
-    }
-    
-    // ---------- BLOQUES DEFINIDOS ----------
-    const blockDefs = [
-      // Movimiento
-      { type: 'motion_move', message0: 'mover %1 pasos', args0: [{type:'field_number', name:'STEPS', value:10}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_turn_right', message0: 'girar ↻ %1 grados', args0: [{type:'field_angle', name:'DEG', angle:15}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_turn_left', message0: 'girar ↺ %1 grados', args0: [{type:'field_angle', name:'DEG', angle:15}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_goto', message0: 'ir a x: %1 y: %2', args0: [{type:'field_number', name:'X', value:0},{type:'field_number', name:'Y', value:0}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_point', message0: 'apuntar en dirección %1', args0: [{type:'field_angle', name:'DEG', angle:90}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_add_x', message0: 'sumar a x %1', args0: [{type:'field_number', name:'VAL', value:10}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_set_x', message0: 'dar a x el valor %1', args0: [{type:'field_number', name:'VAL', value:0}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_add_y', message0: 'sumar a y %1', args0: [{type:'field_number', name:'VAL', value:10}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_set_y', message0: 'dar a y el valor %1', args0: [{type:'field_number', name:'VAL', value:0}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_glide', message0: 'deslizar en %1 segs a x: %2 y: %3', args0: [{type:'field_number', name:'SEC', value:1},{type:'field_number', name:'X', value:0},{type:'field_number', name:'Y', value:0}], previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      { type: 'motion_if_on_edge_bounce', message0: 'rebotar si toca borde', previousStatement:null, nextStatement:null, colour:'#4C97FF' },
-      // Apariencia
-      { type: 'looks_say', message0: 'decir %1 por %2 segundos', args0: [{type:'field_input', name:'TXT', text:'Hola'},{type:'field_number', name:'SEC', value:2}], previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_show', message0: 'mostrar', previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_hide', message0: 'esconder', previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_change_effect', message0: 'sumar al efecto %1 %2', args0: [{type:'field_dropdown', name:'EFECTO', options:[['color','COLOR'],['desvanecer','DESVANECER']]}, {type:'field_number', name:'VAL', value:10}], previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_set_effect', message0: 'fijar efecto %1 a %2', args0: [{type:'field_dropdown', name:'EFECTO', options:[['color','COLOR'],['desvanecer','DESVANECER']]}, {type:'field_number', name:'VAL', value:50}], previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_clear_effects', message0: 'quitar efectos gráficos', previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_next_costume', message0: 'siguiente disfraz', previousStatement:null, nextStatement:null, colour:'#9966FF' },
-      { type: 'looks_costume_index', message0: '# de disfraz', output:'Number', colour:'#9966FF' },
-      // Sonido
-      { type: 'sound_play', message0: 'tocar sonido %1', args0: [{type:'field_input', name:'SND', text:'pop'}], previousStatement:null, nextStatement:null, colour:'#CF63CF' },
-      { type: 'sound_play_until_done', message0: 'tocar sonido %1 y esperar', args0: [{type:'field_input', name:'SND', text:'beep'}], previousStatement:null, nextStatement:null, colour:'#CF63CF' },
-      // Eventos
-      { type: 'events_flag', message0: 'al hacer clic en bandera verde', nextStatement:null, colour:'#FFBF00' },
-      { type: 'events_broadcast', message0: 'enviar %1', args0: [{type:'field_input', name:'MSG', text:'mensaje1'}], previousStatement:null, nextStatement:null, colour:'#FFBF00' },
-      { type: 'events_when_receive', message0: 'al recibir %1', args0: [{type:'field_input', name:'MSG', text:'mensaje1'}], nextStatement:null, colour:'#FFBF00' },
-      // Control
-      { type: 'control_forever', message0: 'por siempre %1', args0: [{type:'input_statement', name:'DO'}], previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      { type: 'control_wait', message0: 'esperar %1 segundos', args0: [{type:'field_number', name:'SEC', value:1}], previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      { type: 'control_repeat_until', message0: 'repetir hasta %1 %2', args0: [{type:'input_value', name:'COND', check:'Boolean'}, {type:'input_statement', name:'DO'}], previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      { type: 'control_stop', message0: 'detener %1', args0: [{type:'field_dropdown', name:'STOP', options:[['todos','all'],['este programa','this']]}], previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      { type: 'control_create_clone', message0: 'crear clon de mí mismo', previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      { type: 'control_delete_clone', message0: 'borrar este clon', previousStatement:null, nextStatement:null, colour:'#FFAB19' },
-      // Sensores
-      { type: 'sensing_ask', message0: 'preguntar %1 y esperar', args0: [{type:'field_input', name:'Q', text:'¿Nombre?'}], previousStatement:null, nextStatement:null, colour:'#5CB1D6' },
-      { type: 'sensing_answer', message0: 'respuesta', output:'String', colour:'#5CB1D6' },
-      { type: 'sensing_touching_edge', message0: '¿tocando borde?', output:'Boolean', colour:'#5CB1D6' },
-      { type: 'sensing_mouse_x', message0: 'ratón X', output:'Number', colour:'#5CB1D6' },
-      { type: 'sensing_mouse_y', message0: 'ratón Y', output:'Number', colour:'#5CB1D6' },
-      { type: 'sensing_dist_to', message0: 'distancia a x:%1 y:%2', args0: [{type:'field_number', name:'X', value:0},{type:'field_number', name:'Y', value:0}], output:'Number', colour:'#5CB1D6' },
-      // Operadores extra
-      { type: 'operator_mod', message0: '%1 mod %2', args0: [{type:'input_value', name:'A', check:'Number'},{type:'input_value', name:'B', check:'Number'}], output:'Number', colour:'#59C059' },
-      { type: 'operator_round', message0: 'redondear %1', args0: [{type:'input_value', name:'NUM', check:'Number'}], output:'Number', colour:'#59C059' },
-      { type: 'operator_join', message0: 'unir %1 %2', args0: [{type:'input_value', name:'A', check:'String'},{type:'input_value', name:'B', check:'String'}], output:'String', colour:'#59C059' },
-      { type: 'operator_length', message0: 'longitud de %1', args0: [{type:'input_value', name:'STR', check:'String'}], output:'Number', colour:'#59C059' }
-    ];
-    
-    Blockly.defineBlocksWithJsonArray(blockDefs);
-    
-    // ---------- GENERADORES ASÍNCRONOS ----------
-    const jg = javascript.javascriptGenerator;
-    
-    jg.forBlock['motion_move'] = (b) => `moveSteps(${b.getFieldValue('STEPS')}); await yieldFrame();\n`;
-    jg.forBlock['motion_turn_right'] = (b) => `changeDir(${b.getFieldValue('DEG')}); await yieldFrame();\n`;
-    jg.forBlock['motion_turn_left'] = (b) => `changeDir(-${b.getFieldValue('DEG')}); await yieldFrame();\n`;
-    jg.forBlock['motion_goto'] = (b) => `posX = logicToCanvasX(${b.getFieldValue('X')}); posY = logicToCanvasY(${b.getFieldValue('Y')}); draw(); await yieldFrame();\n`;
-    jg.forBlock['motion_point'] = (b) => `direction = ${b.getFieldValue('DEG')}; draw(); await yieldFrame();\n`;
-    jg.forBlock['motion_add_x'] = (b) => `{ let v=${b.getFieldValue('VAL')}; posX+=v; if(v>0)facingRight=true; else if(v<0)facingRight=false; draw(); await yieldFrame(); }\n`;
-    jg.forBlock['motion_set_x'] = (b) => `posX = logicToCanvasX(${b.getFieldValue('VAL')}); draw(); await yieldFrame();\n`;
-    jg.forBlock['motion_add_y'] = (b) => `posY -= ${b.getFieldValue('VAL')}; draw(); await yieldFrame();\n`;
-    jg.forBlock['motion_set_y'] = (b) => `posY = logicToCanvasY(${b.getFieldValue('VAL')}); draw(); await yieldFrame();\n`;
-    
-    jg.forBlock['motion_glide'] = (b) => {
-      const sec = b.getFieldValue('SEC'), tx = b.getFieldValue('X'), ty = b.getFieldValue('Y');
-      return `
-      {
-        let startX = posX, startY = posY;
-        let targetX = logicToCanvasX(${tx}), targetY = logicToCanvasY(${ty});
-        let steps = Math.max(1, Math.round(${sec} * 30));
-        for(let i=1; i<=steps; i++) {
-          if(!isRunning) break;
-          posX = startX + (targetX - startX) * (i/steps);
-          posY = startY + (targetY - startY) * (i/steps);
-          draw();
-          await yieldFrame();
-        }
-      }\n`;
-    };
-    
-    jg.forBlock['motion_if_on_edge_bounce'] = () => `
-      if(posX <= 15 || posX >= 385) { direction = 180 - direction; if(direction<0) direction+=360; }
-      if(posY <= 15 || posY >= 285) { direction = 360 - direction; if(direction<0) direction+=360; }
-      draw(); await yieldFrame();\n`;
-    
-    jg.forBlock['looks_say'] = (b) => `await sayText('${b.getFieldValue('TXT').replace(/'/g,"\\'")}', ${b.getFieldValue('SEC')});\n`;
-    jg.forBlock['looks_show'] = () => `visible = true; draw(); await yieldFrame();\n`;
-    jg.forBlock['looks_hide'] = () => `visible = false; draw(); await yieldFrame();\n`;
-    jg.forBlock['looks_change_effect'] = (b) => `changeEffect('${b.getFieldValue('EFECTO')}', ${b.getFieldValue('VAL')}); await yieldFrame();\n`;
-    jg.forBlock['looks_set_effect'] = (b) => `setEffect('${b.getFieldValue('EFECTO')}', ${b.getFieldValue('VAL')}); await yieldFrame();\n`;
-    jg.forBlock['looks_clear_effects'] = () => `efectoColor=0; efectoDesvanecer=100; draw(); await yieldFrame();\n`;
-    jg.forBlock['looks_next_costume'] = () => `costumeIndex = (costumeIndex+1) % costumes.length; spriteData = costumes[costumeIndex].slice(); draw(); await yieldFrame();\n`;
-    jg.forBlock['looks_costume_index'] = () => [`costumeIndex`, 0];
-    
-    jg.forBlock['sound_play'] = (b) => `playSound('${b.getFieldValue('SND')}'); await yieldFrame();\n`;
-    jg.forBlock['sound_play_until_done'] = (b) => `playSound('${b.getFieldValue('SND')}'); await waitSecs(0.3); await yieldFrame();\n`;
-    
-    jg.forBlock['events_flag'] = () => `// Evento bandera verde\n`;
-    jg.forBlock['events_broadcast'] = (b) => `broadcast('${b.getFieldValue('MSG')}'); await yieldFrame();\n`;
-    jg.forBlock['events_when_receive'] = (b) => {
-      const msg = b.getFieldValue('MSG');
-      const branch = jg.statementToCode(b, 'DO');
-      return `whenReceive('${msg}', async () => { ${branch} });\n`;
-    };
-    
-    jg.forBlock['control_forever'] = (b) => `while(isRunning) {\n${jg.statementToCode(b,'DO')}  await yieldFrame();\n}\n`;
-    jg.forBlock['control_wait'] = (b) => `await waitSecs(${b.getFieldValue('SEC')});\n`;
-    jg.forBlock['control_repeat_until'] = function(b) {
-      const cond = jg.valueToCode(b, 'COND', 0) || 'false';
-      const branch = jg.statementToCode(b, 'DO');
-      return `while(!(${cond}) && isRunning) {\n${branch}  await yieldFrame();\n}\n`;
-    };
-    jg.forBlock['control_stop'] = (b) => {
-      const opt = b.getFieldValue('STOP');
-      if(opt === 'all') return `isRunning = false; throw new Error('STOP_ALL');\n`;
-      return `// detener este script\n`;
-    };
-    jg.forBlock['control_create_clone'] = () => `createClone(); await yieldFrame();\n`;
-    jg.forBlock['control_delete_clone'] = () => `// este bloque solo es válido en un clon; en el objeto principal no hace nada.\n`;
-    
-    jg.forBlock['sensing_ask'] = (b) => `window.lastAnswer = prompt('${b.getFieldValue('Q')}'); await yieldFrame();\n`;
-    jg.forBlock['sensing_answer'] = () => [`window.lastAnswer || ''`, 0];
-    jg.forBlock['sensing_touching_edge'] = () => [`(posX <= 15 || posX >= 385 || posY <= 15 || posY >= 285)`, 0];
-    jg.forBlock['sensing_mouse_x'] = () => [`mouseX`, 0];
-    jg.forBlock['sensing_mouse_y'] = () => [`mouseY`, 0];
-    jg.forBlock['sensing_dist_to'] = (b) => {
-      const x = b.getFieldValue('X'), y = b.getFieldValue('Y');
-      return [`Math.hypot(posX - logicToCanvasX(${x}), posY - logicToCanvasY(${y}))`, 0];
-    };
-    
-    jg.forBlock['operator_mod'] = (b) => [`((${jg.valueToCode(b,'A',0)||'0'}) % (${jg.valueToCode(b,'B',0)||'1'}))`, 0];
-    jg.forBlock['operator_round'] = (b) => [`Math.round(${jg.valueToCode(b,'NUM',0)||'0'})`, 0];
-    jg.forBlock['operator_join'] = (b) => [`(${jg.valueToCode(b,'A',0)||"''"} + ${jg.valueToCode(b,'B',0)||"''"})`, 0];
-    jg.forBlock['operator_length'] = (b) => [`String(${jg.valueToCode(b,'STR',0)||"''"}).length`, 0];
-    
-    // Sobreescribir repeat estándar
-    jg.forBlock['controls_repeat_ext'] = function(b) {
-      const times = jg.valueToCode(b, 'TIMES', 0) || '1';
-      const branch = jg.statementToCode(b, 'DO');
-      return `for(let _i=0; _i<${times}; _i++) {\n${branch}  await yieldFrame();\n}\n`;
-    };
-    
-    // Toolbox completo
-    const toolbox = {
-      kind: 'categoryToolbox',
-      contents: [
-        { kind: 'category', name: '🔵 Movimiento', colour:'#4C97FF', contents:[
-          {kind:'block',type:'motion_move'},{kind:'block',type:'motion_turn_right'},{kind:'block',type:'motion_turn_left'},
-          {kind:'block',type:'motion_goto'},{kind:'block',type:'motion_point'},{kind:'block',type:'motion_glide'},
-          {kind:'block',type:'motion_add_x'},{kind:'block',type:'motion_set_x'},{kind:'block',type:'motion_add_y'},{kind:'block',type:'motion_set_y'},
-          {kind:'block',type:'motion_if_on_edge_bounce'}
-        ]},
-        { kind: 'category', name: '🟣 Apariencia', colour:'#9966FF', contents:[
-          {kind:'block',type:'looks_say'},{kind:'block',type:'looks_show'},{kind:'block',type:'looks_hide'},
-          {kind:'block',type:'looks_change_effect'},{kind:'block',type:'looks_set_effect'},{kind:'block',type:'looks_clear_effects'},
-          {kind:'block',type:'looks_next_costume'},{kind:'block',type:'looks_costume_index'}
-        ]},
-        { kind: 'category', name: '💗 Sonido', colour:'#CF63CF', contents:[
-          {kind:'block',type:'sound_play'},{kind:'block',type:'sound_play_until_done'}
-        ]},
-        { kind: 'category', name: '🟡 Eventos', colour:'#FFBF00', contents:[
-          {kind:'block',type:'events_flag'},{kind:'block',type:'events_broadcast'},{kind:'block',type:'events_when_receive'}
-        ]},
-        { kind: 'category', name: '🟠 Control', colour:'#FFAB19', contents:[
-          {kind:'block',type:'control_wait'},{kind:'block',type:'control_forever'},{kind:'block',type:'control_repeat_until'},
-          {kind:'block',type:'controls_repeat_ext', inputs:{TIMES:{shadow:{type:'math_number',fields:{NUM:10}}}}},
-          {kind:'block',type:'controls_if'},{kind:'block',type:'control_stop'},
-          {kind:'block',type:'control_create_clone'},{kind:'block',type:'control_delete_clone'}
-        ]},
-        { kind: 'category', name: '🔹 Sensores', colour:'#5CB1D6', contents:[
-          {kind:'block',type:'sensing_ask'},{kind:'block',type:'sensing_answer'},{kind:'block',type:'sensing_touching_edge'},
-          {kind:'block',type:'sensing_mouse_x'},{kind:'block',type:'sensing_mouse_y'},{kind:'block',type:'sensing_dist_to'}
-        ]},
-        { kind: 'category', name: '🟢 Operadores', colour:'#59C059', contents:[
-          {kind:'block',type:'math_arithmetic'},{kind:'block',type:'logic_compare'},{kind:'block',type:'operator_mod'},
-          {kind:'block',type:'operator_round'},{kind:'block',type:'operator_join'},{kind:'block',type:'operator_length'},
-          {kind:'block',type:'math_random_int', inputs:{FROM:{shadow:{type:'math_number',fields:{NUM:1}}}, TO:{shadow:{type:'math_number',fields:{NUM:10}}}}}
-        ]},
-        { kind: 'category', name: '🧱 Variables', colour:'#FF8C1A', custom:'VARIABLE' }
-      ]
-    };
-    
-    const workspace = Blockly.inject('blocklyDiv', { toolbox, zoom: { controls: true, wheel: true } });
-    
-    // Ejecución principal
-    window.lastAnswer = '';
-    
-    function stopCode() {
-      isRunning = false;
-      currentSayText = null;
-      draw();
-    }
-    
-    async function runCode() {
-      stopCode();
-      await waitSecs(0.05);
-      isRunning = true;
-      // Resetear posición y estado
-      posX = 200; posY = 150; direction = 90; visible = true; facingRight = true;
-      clones = [];
-      efectoColor = 0; efectoDesvanecer = 100;
-      costumeIndex = 0; spriteData = costumes[0].slice();
-      messageBus = {}; // limpiar listeners previos
-      draw();
-      
-      const code = jg.workspaceToCode(workspace);
-      const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-      try {
-        await (new AsyncFunction(code))();
-      } catch(e) {
-        if(e.message !== 'STOP_ALL') console.error('Error en ejecución:', e);
-      } finally {
-        isRunning = false;
-        currentSayText = null;
-        draw();
-      }
-    }
-    
-    // Editor de sprite
-    function buildGrid() {
-      const grid = document.getElementById('pixel-grid');
-      grid.innerHTML = '';
-      for(let i=0; i<TOTAL; i++) {
-        const cell = document.createElement('div'); cell.className='pixel';
-        cell.style.background = spriteData[i] === '#00000000' ? '#ffffff' : spriteData[i];
-        cell.onclick = () => { spriteData[i] = document.getElementById('colorPicker').value; cell.style.background = spriteData[i]; draw(); };
-        cell.oncontextmenu = (e) => { e.preventDefault(); spriteData[i] = '#00000000'; cell.style.background = '#fff'; draw(); };
-        grid.appendChild(cell);
-      }
-    }
-    buildGrid();
-    
-    window.toggleModal = () => {
-      const m = document.getElementById('spriteModal');
-      m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-    };
-    window.clearSprite = () => { spriteData.fill('#00000000'); buildGrid(); draw(); };
-    
-    // Exponer funciones globales necesarias
-    window.moveSteps = moveSteps;
-    window.changeDir = changeDir;
-    window.yieldFrame = yieldFrame;
-    window.waitSecs = waitSecs;
-    window.sayText = sayText;
-    window.playSound = playSound;
-    window.logicToCanvasX = logicToCanvasX;
-    window.logicToCanvasY = logicToCanvasY;
-    window.setEffect = setEffect;
-    window.changeEffect = changeEffect;
-    window.createClone = createClone;
-    window.deleteClone = deleteClone;
-    window.broadcast = broadcast;
-    window.whenReceive = whenReceive;
-    window.stopCode = stopCode;
-    window.runCode = runCode;
-    
-    draw();
-  })();
+    return closest;
+  }
+
+  draw(){
+    if(this.hp<=0) return;
+
+    ctx.save();
+    ctx.translate(this.x,this.y);
+
+    let walk = Math.sin(this.anim)*5;
+
+    // PIE ATRÁS
+    ctx.drawImage(sprites.foot, -8, 10 + walk, 16,16);
+
+    // PIE ADELANTE
+    ctx.drawImage(sprites.foot, 2, 10 - walk, 16,16);
+
+    // BRAZO ATRÁS
+    ctx.drawImage(sprites.handBack, -12, -5, 16,16);
+
+    // TORSO
+    ctx.drawImage(sprites.torso, -10, -10, 20,20);
+
+    // BRAZO ADELANTE
+    ctx.drawImage(sprites.handFront, 5, -5, 16,16);
+
+    // CABEZA
+    ctx.drawImage(sprites.head, -8, -25, 16,16);
+
+    ctx.restore();
+
+    // vida
+    ctx.fillStyle="green";
+    ctx.fillRect(this.x-10,this.y-30,this.hp/5,3);
+  }
+}
+
+canvas.addEventListener("click", e=>{
+  if(running) return;
+
+  let rect=canvas.getBoundingClientRect();
+  let x=e.clientX-rect.left;
+  let y=e.clientY-rect.top;
+
+  units.push(new Unit(x,y,team));
+});
+
+function startBattle(){
+  running=true;
+}
+
+function update(){
+  units = units.filter(u=>u.hp>0);
+  for(let u of units) u.update();
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let u of units) u.draw();
+}
+
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
 </script>
+
 </body>
 </html>
